@@ -1,0 +1,548 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DC591CC11F8D57D300351E22 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CC01F8D57D300351E22 /* AppDelegate.swift */; };
+		DC591CC31F8D57D300351E22 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CC21F8D57D300351E22 /* ViewController.swift */; };
+		DC591CC51F8D57D300351E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC591CC41F8D57D300351E22 /* Assets.xcassets */; };
+		DC591CC81F8D57D300351E22 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC591CC61F8D57D300351E22 /* Main.storyboard */; };
+		DC591CD41F8D57D300351E22 /* AmigaGuideXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CD31F8D57D300351E22 /* AmigaGuideXTests.swift */; };
+		DC591CDF1F8D57D300351E22 /* AmigaGuideXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CDE1F8D57D300351E22 /* AmigaGuideXUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DC591CD01F8D57D300351E22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DC591CB51F8D57D300351E22 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DC591CBC1F8D57D300351E22;
+			remoteInfo = AmigaGuideX;
+		};
+		DC591CDB1F8D57D300351E22 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DC591CB51F8D57D300351E22 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DC591CBC1F8D57D300351E22;
+			remoteInfo = AmigaGuideX;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DC591CBD1F8D57D300351E22 /* AmigaGuideX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AmigaGuideX.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC591CC01F8D57D300351E22 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DC591CC21F8D57D300351E22 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		DC591CC41F8D57D300351E22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DC591CC71F8D57D300351E22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		DC591CC91F8D57D300351E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC591CCA1F8D57D300351E22 /* AmigaGuideX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AmigaGuideX.entitlements; sourceTree = "<group>"; };
+		DC591CCF1F8D57D300351E22 /* AmigaGuideXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AmigaGuideXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC591CD31F8D57D300351E22 /* AmigaGuideXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaGuideXTests.swift; sourceTree = "<group>"; };
+		DC591CD51F8D57D300351E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC591CDA1F8D57D300351E22 /* AmigaGuideXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AmigaGuideXUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DC591CDE1F8D57D300351E22 /* AmigaGuideXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaGuideXUITests.swift; sourceTree = "<group>"; };
+		DC591CE01F8D57D300351E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DC591CBA1F8D57D300351E22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC591CCC1F8D57D300351E22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC591CD71F8D57D300351E22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DC591CB41F8D57D300351E22 = {
+			isa = PBXGroup;
+			children = (
+				DC591CBF1F8D57D300351E22 /* AmigaGuideX */,
+				DC591CD21F8D57D300351E22 /* AmigaGuideXTests */,
+				DC591CDD1F8D57D300351E22 /* AmigaGuideXUITests */,
+				DC591CBE1F8D57D300351E22 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DC591CBE1F8D57D300351E22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DC591CBD1F8D57D300351E22 /* AmigaGuideX.app */,
+				DC591CCF1F8D57D300351E22 /* AmigaGuideXTests.xctest */,
+				DC591CDA1F8D57D300351E22 /* AmigaGuideXUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DC591CBF1F8D57D300351E22 /* AmigaGuideX */ = {
+			isa = PBXGroup;
+			children = (
+				DC591CC01F8D57D300351E22 /* AppDelegate.swift */,
+				DC591CC21F8D57D300351E22 /* ViewController.swift */,
+				DC591CC41F8D57D300351E22 /* Assets.xcassets */,
+				DC591CC61F8D57D300351E22 /* Main.storyboard */,
+				DC591CC91F8D57D300351E22 /* Info.plist */,
+				DC591CCA1F8D57D300351E22 /* AmigaGuideX.entitlements */,
+			);
+			path = AmigaGuideX;
+			sourceTree = "<group>";
+		};
+		DC591CD21F8D57D300351E22 /* AmigaGuideXTests */ = {
+			isa = PBXGroup;
+			children = (
+				DC591CD31F8D57D300351E22 /* AmigaGuideXTests.swift */,
+				DC591CD51F8D57D300351E22 /* Info.plist */,
+			);
+			path = AmigaGuideXTests;
+			sourceTree = "<group>";
+		};
+		DC591CDD1F8D57D300351E22 /* AmigaGuideXUITests */ = {
+			isa = PBXGroup;
+			children = (
+				DC591CDE1F8D57D300351E22 /* AmigaGuideXUITests.swift */,
+				DC591CE01F8D57D300351E22 /* Info.plist */,
+			);
+			path = AmigaGuideXUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DC591CBC1F8D57D300351E22 /* AmigaGuideX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC591CE31F8D57D300351E22 /* Build configuration list for PBXNativeTarget "AmigaGuideX" */;
+			buildPhases = (
+				DC591CB91F8D57D300351E22 /* Sources */,
+				DC591CBA1F8D57D300351E22 /* Frameworks */,
+				DC591CBB1F8D57D300351E22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AmigaGuideX;
+			productName = AmigaGuideX;
+			productReference = DC591CBD1F8D57D300351E22 /* AmigaGuideX.app */;
+			productType = "com.apple.product-type.application";
+		};
+		DC591CCE1F8D57D300351E22 /* AmigaGuideXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC591CE61F8D57D300351E22 /* Build configuration list for PBXNativeTarget "AmigaGuideXTests" */;
+			buildPhases = (
+				DC591CCB1F8D57D300351E22 /* Sources */,
+				DC591CCC1F8D57D300351E22 /* Frameworks */,
+				DC591CCD1F8D57D300351E22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DC591CD11F8D57D300351E22 /* PBXTargetDependency */,
+			);
+			name = AmigaGuideXTests;
+			productName = AmigaGuideXTests;
+			productReference = DC591CCF1F8D57D300351E22 /* AmigaGuideXTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		DC591CD91F8D57D300351E22 /* AmigaGuideXUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC591CE91F8D57D300351E22 /* Build configuration list for PBXNativeTarget "AmigaGuideXUITests" */;
+			buildPhases = (
+				DC591CD61F8D57D300351E22 /* Sources */,
+				DC591CD71F8D57D300351E22 /* Frameworks */,
+				DC591CD81F8D57D300351E22 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DC591CDC1F8D57D300351E22 /* PBXTargetDependency */,
+			);
+			name = AmigaGuideXUITests;
+			productName = AmigaGuideXUITests;
+			productReference = DC591CDA1F8D57D300351E22 /* AmigaGuideXUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DC591CB51F8D57D300351E22 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0900;
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = "Iggy Drougge";
+				TargetAttributes = {
+					DC591CBC1F8D57D300351E22 = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+					};
+					DC591CCE1F8D57D300351E22 = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = DC591CBC1F8D57D300351E22;
+					};
+					DC591CD91F8D57D300351E22 = {
+						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = DC591CBC1F8D57D300351E22;
+					};
+				};
+			};
+			buildConfigurationList = DC591CB81F8D57D300351E22 /* Build configuration list for PBXProject "AmigaGuideX" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = DC591CB41F8D57D300351E22;
+			productRefGroup = DC591CBE1F8D57D300351E22 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DC591CBC1F8D57D300351E22 /* AmigaGuideX */,
+				DC591CCE1F8D57D300351E22 /* AmigaGuideXTests */,
+				DC591CD91F8D57D300351E22 /* AmigaGuideXUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DC591CBB1F8D57D300351E22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC591CC51F8D57D300351E22 /* Assets.xcassets in Resources */,
+				DC591CC81F8D57D300351E22 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC591CCD1F8D57D300351E22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC591CD81F8D57D300351E22 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DC591CB91F8D57D300351E22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC591CC31F8D57D300351E22 /* ViewController.swift in Sources */,
+				DC591CC11F8D57D300351E22 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC591CCB1F8D57D300351E22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC591CD41F8D57D300351E22 /* AmigaGuideXTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC591CD61F8D57D300351E22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DC591CDF1F8D57D300351E22 /* AmigaGuideXUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DC591CD11F8D57D300351E22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DC591CBC1F8D57D300351E22 /* AmigaGuideX */;
+			targetProxy = DC591CD01F8D57D300351E22 /* PBXContainerItemProxy */;
+		};
+		DC591CDC1F8D57D300351E22 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DC591CBC1F8D57D300351E22 /* AmigaGuideX */;
+			targetProxy = DC591CDB1F8D57D300351E22 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DC591CC61F8D57D300351E22 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DC591CC71F8D57D300351E22 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DC591CE11F8D57D300351E22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		DC591CE21F8D57D300351E22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+			};
+			name = Release;
+		};
+		DC591CE41F8D57D300351E22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AmigaGuideX/AmigaGuideX.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = AmigaGuideX/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.kristallpojken.AmigaGuideX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		DC591CE51F8D57D300351E22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = AmigaGuideX/AmigaGuideX.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = AmigaGuideX/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.kristallpojken.AmigaGuideX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+		DC591CE71F8D57D300351E22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = AmigaGuideXTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.kristallpojken.AmigaGuideXTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AmigaGuideX.app/Contents/MacOS/AmigaGuideX";
+			};
+			name = Debug;
+		};
+		DC591CE81F8D57D300351E22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = AmigaGuideXTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.kristallpojken.AmigaGuideXTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AmigaGuideX.app/Contents/MacOS/AmigaGuideX";
+			};
+			name = Release;
+		};
+		DC591CEA1F8D57D300351E22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = AmigaGuideXUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.kristallpojken.AmigaGuideXUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_TARGET_NAME = AmigaGuideX;
+			};
+			name = Debug;
+		};
+		DC591CEB1F8D57D300351E22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = AmigaGuideXUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.kristallpojken.AmigaGuideXUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TEST_TARGET_NAME = AmigaGuideX;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DC591CB81F8D57D300351E22 /* Build configuration list for PBXProject "AmigaGuideX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC591CE11F8D57D300351E22 /* Debug */,
+				DC591CE21F8D57D300351E22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC591CE31F8D57D300351E22 /* Build configuration list for PBXNativeTarget "AmigaGuideX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC591CE41F8D57D300351E22 /* Debug */,
+				DC591CE51F8D57D300351E22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC591CE61F8D57D300351E22 /* Build configuration list for PBXNativeTarget "AmigaGuideXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC591CE71F8D57D300351E22 /* Debug */,
+				DC591CE81F8D57D300351E22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DC591CE91F8D57D300351E22 /* Build configuration list for PBXNativeTarget "AmigaGuideXUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC591CEA1F8D57D300351E22 /* Debug */,
+				DC591CEB1F8D57D300351E22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DC591CB51F8D57D300351E22 /* Project object */;
+}
