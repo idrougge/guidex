@@ -13,6 +13,8 @@
 		DC591CC81F8D57D300351E22 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC591CC61F8D57D300351E22 /* Main.storyboard */; };
 		DC591CD41F8D57D300351E22 /* AmigaGuideXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CD31F8D57D300351E22 /* AmigaGuideXTests.swift */; };
 		DC591CDF1F8D57D300351E22 /* AmigaGuideXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CDE1F8D57D300351E22 /* AmigaGuideXUITests.swift */; };
+		DC591CED1F8D5B0400351E22 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CEC1F8D5B0400351E22 /* Parser.swift */; };
+		DC591CEF1F8D5FDC00351E22 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CEE1F8D5FDC00351E22 /* String+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,8 @@
 		DC591CDA1F8D57D300351E22 /* AmigaGuideXUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AmigaGuideXUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC591CDE1F8D57D300351E22 /* AmigaGuideXUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaGuideXUITests.swift; sourceTree = "<group>"; };
 		DC591CE01F8D57D300351E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC591CEC1F8D5B0400351E22 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		DC591CEE1F8D5FDC00351E22 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 			children = (
 				DC591CC01F8D57D300351E22 /* AppDelegate.swift */,
 				DC591CC21F8D57D300351E22 /* ViewController.swift */,
+				DC591CEC1F8D5B0400351E22 /* Parser.swift */,
+				DC591CEE1F8D5FDC00351E22 /* String+Extension.swift */,
 				DC591CC41F8D57D300351E22 /* Assets.xcassets */,
 				DC591CC61F8D57D300351E22 /* Main.storyboard */,
 				DC591CC91F8D57D300351E22 /* Info.plist */,
@@ -193,6 +199,11 @@
 					DC591CBC1F8D57D300351E22 = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 					DC591CCE1F8D57D300351E22 = {
 						CreatedOnToolsVersion = 9.0;
@@ -257,8 +268,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC591CEF1F8D5FDC00351E22 /* String+Extension.swift in Sources */,
 				DC591CC31F8D57D300351E22 /* ViewController.swift in Sources */,
 				DC591CC11F8D57D300351E22 /* AppDelegate.swift in Sources */,
+				DC591CED1F8D5B0400351E22 /* Parser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,7 +366,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -404,7 +417,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -415,11 +428,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = AmigaGuideX/AmigaGuideX.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = AmigaGuideX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kristallpojken.AmigaGuideX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -430,11 +443,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = AmigaGuideX/AmigaGuideX.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = AmigaGuideX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kristallpojken.AmigaGuideX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
