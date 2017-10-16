@@ -56,6 +56,20 @@ class ViewController: NSViewController {
             case .escaped(let escaped):
                 textView.insertText(escaped)
             case .normal(.amigaguide): textView.insertText("AmigaGuide®")
+            case .normal(.jcenter):
+                textView.insertParagraphSeparator(nil)
+                textView.alignCenter(nil)
+            case .normal(.jleft):
+                textView.insertParagraphSeparator(nil)
+                textView.alignLeft(nil)
+            case .normal(.jright):
+                textView.insertParagraphSeparator(nil)
+                textView.alignRight(nil)
+            case .global(.endnode):
+                textView.insertParagraphSeparator(nil)
+            case .global(.node(let node, let headline)):
+                textView.insertText("\(node): \(headline ?? "<nil>")")
+                textView.insertLineBreak(nil)
             default:
                 textView.typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
                 textView.insertText(String(describing: token))
