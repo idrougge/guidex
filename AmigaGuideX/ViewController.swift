@@ -20,12 +20,11 @@ class ViewController: NSViewController {
             textView.font = NSFont.systemFont(ofSize: 12).fontDescriptor.withSymbolicTraits(NSFontDescriptor.SymbolicTraits.monoSpace)
         }
  */
-        let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)
+        let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
         let manager = NSFontManager.shared
         manager.addFontTrait(NSFontItalicTrait)
-        let italic = manager.convert(fixedWidth!, toHaveTrait: NSFontTraitMask(rawValue: UInt(NSFontItalicTrait)))
-        //let bold = manager.convert(fixedWidth!, toHaveTrait: NSFontTraitMask(rawValue: UInt(NSFontBoldTrait)))
-        let bold = manager.convert(fixedWidth!, toHaveTrait: NSFontTraitMask.boldFontMask)
+        let italic = manager.convert(fixedWidth, toHaveTrait: NSFontTraitMask(rawValue: UInt(NSFontItalicTrait)))
+        let bold = manager.convert(fixedWidth, toHaveTrait: NSFontTraitMask.boldFontMask)
         textView.font = fixedWidth
         /*
         NSFontManager.trait
@@ -36,19 +35,31 @@ class ViewController: NSViewController {
             switch token {
             case .newline, .normal(.linebreak): textView.insertLineBreak(nil)
             case .plaintext(let text): textView.insertText(text)
-            case .normal(.italic): //textView.font = NSFont.systemFont(ofSize: 14)
-            //textView.typingAttributes = [NSAttributedStringKey.strikethroughStyle:NSUnderlineStyle.styleDouble]
-            //textView.typingAttributes = [NSAttributedStringKey.foregroundColor:NSColor.green]
+            case .normal(.italic):
                 textView.typingAttributes = [NSAttributedStringKey.font:italic]
             case .normal(.noitalic): textView.typingAttributes = [NSAttributedStringKey.font:fixedWidth]
             case .normal(.bold): textView.typingAttributes = [NSAttributedStringKey.font:bold]
             case .normal(.nobold):
                 let font = manager.convert(textView.font!, toNotHaveTrait: .boldFontMask)
                 textView.typingAttributes = [.font: font]
+            case .normal(.underline):
+                textView.typingAttributes.updateValue(NSUnderlineStyle.styleSingle.rawValue, forKey: .underlineStyle)
+            case .normal(.nounderline):
+                textView.typingAttributes.removeValue(forKey: .underlineStyle)
             case .normal(.plain): textView.typingAttributes = [.font:fixedWidth]
             case .normal(.link(let label, let node, _)):
-                textView.insertText("LINK -> node: \(node) label: \(label)")
-            default: break
+                // FIXME: System and REXX links must be discarded in a sensible way
+                // TODO: Register URL scheme
+                textView.typingAttributes.updateValue("url", forKey: .link)
+                textView.insertText("\(label) -> \(node)")
+                textView.typingAttributes.removeValue(forKey: .link)
+            case .escaped(let escaped):
+                textView.insertText(escaped)
+            case .normal(.amigaguide): textView.insertText("AmigaGuide®")
+            default:
+                textView.typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
+                textView.insertText(String(describing: token))
+                textView.typingAttributes.removeValue(forKey: .foregroundColor)
             }
         }
         //textView.insertLineBreak(nil)

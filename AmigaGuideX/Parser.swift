@@ -134,6 +134,7 @@ struct AmigaGuide {
                         match.numberOfRanges == 4
                         else { return nil }
                     let label = String(str[Range(match.range(at: 1), in: str)!])
+                    // FIXME: Handle System and REXX links by not handling them
                     let _ = String(str[Range(match.range(at: 2), in: str)!]) // Type of link
                     let node = String(str[Range(match.range(at: 3), in: str)!])
                     self = .link(label: label, node: node, line: nil)
@@ -164,6 +165,8 @@ class Parser {
     
     func parseAppend(_ line:String) {
         if let backslash = line.index(of: "\\") {
+            // FIXME: \n (newline) is rendered as "n"
+            // FIXME: Escaped characters are followed by newline
             parseAppend(String(line[..<backslash]))
             let escaped = line.index(after: backslash)
             parseResult.append(.escaped(String(line[escaped])))
