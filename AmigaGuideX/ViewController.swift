@@ -21,8 +21,7 @@ class ViewController: NSViewController {
         }
  */
         let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)
-        let manager = NSFontManager.shared//NSFontManager()
-        //manager.setSelectedFont(fixedWidth!, isMultiple: false)
+        let manager = NSFontManager.shared
         manager.addFontTrait(NSFontItalicTrait)
         let italic = manager.convert(fixedWidth!, toHaveTrait: NSFontTraitMask(rawValue: UInt(NSFontItalicTrait)))
         //let bold = manager.convert(fixedWidth!, toHaveTrait: NSFontTraitMask(rawValue: UInt(NSFontBoldTrait)))
@@ -32,15 +31,7 @@ class ViewController: NSViewController {
         NSFontManager.trait
         NSFontMonoSpaceTrait
  */
-        textView.insertText("Hej")
         let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
-        //textView.insertText( parser.parseResult.first)
-        let first = parser.parseResult.first
-        print(first)
-        //textView.insertText("bläj")
-        //textView.insertText(first)
-        print("first:",String(describing: first))
-        textView.insertText(String(describing: first))
         for token in parser.parseResult {
             switch token {
             case .newline, .normal(.linebreak): textView.insertLineBreak(nil)
@@ -48,11 +39,15 @@ class ViewController: NSViewController {
             case .normal(.italic): //textView.font = NSFont.systemFont(ofSize: 14)
             //textView.typingAttributes = [NSAttributedStringKey.strikethroughStyle:NSUnderlineStyle.styleDouble]
             //textView.typingAttributes = [NSAttributedStringKey.foregroundColor:NSColor.green]
-            //textView.setFont(NSFont.systemFont(ofSize: 14), range: NSMakeRange(textView.range, <#T##len: Int##Int#>))
                 textView.typingAttributes = [NSAttributedStringKey.font:italic]
             case .normal(.noitalic): textView.typingAttributes = [NSAttributedStringKey.font:fixedWidth]
             case .normal(.bold): textView.typingAttributes = [NSAttributedStringKey.font:bold]
-            case .normal(.nobold): textView.typingAttributes = [:]
+            case .normal(.nobold):
+                let font = manager.convert(textView.font!, toNotHaveTrait: .boldFontMask)
+                textView.typingAttributes = [.font: font]
+            case .normal(.plain): textView.typingAttributes = [.font:fixedWidth]
+            case .normal(.link(let label, let node, _)):
+                textView.insertText("LINK -> node: \(node) label: \(label)")
             default: break
             }
         }
