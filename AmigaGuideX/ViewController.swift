@@ -11,6 +11,8 @@ import Cocoa
 class ViewController: NSViewController {
 
     @IBOutlet var textView: NSTextView!
+    let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         /*
@@ -22,40 +24,60 @@ class ViewController: NSViewController {
  */
         let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
         let manager = NSFontManager.shared
-        manager.addFontTrait(NSFontItalicTrait)
         let italic = manager.convert(fixedWidth, toHaveTrait: NSFontTraitMask(rawValue: UInt(NSFontItalicTrait)))
         let bold = manager.convert(fixedWidth, toHaveTrait: NSFontTraitMask.boldFontMask)
         textView.font = fixedWidth
+        //let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        //paragraph.headIndent = 100.0
+        //paragraph.firstLineHeadIndent = 100.0
+        textView.defaultParagraphStyle = paragraph
+        textView.alignLeft(nil)
         /*
         NSFontManager.trait
         NSFontMonoSpaceTrait
  */
+        var typingAttributes = textView.typingAttributes
+        typingAttributes.updateValue(fixedWidth, forKey: .font)
+        textView.typingAttributes = typingAttributes
+        textView.textStorage?.addAttributes(typingAttributes, range: NSMakeRange(0, 0) )
         let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
         for token in parser.parseResult {
             switch token {
-            case .newline, .normal(.linebreak): textView.insertLineBreak(nil)
-            case .plaintext(let text): textView.insertText(text)
+            case .newline, .normal(.linebreak):
+                textView.textStorage?.insert(NSAttributedString(string:"\n"), at: textView.textStorage!.length)
+            case .plaintext(let text):
+                let insertpoint = textView.textStorage!.length
+                let range = NSMakeRange(insertpoint, text.count)
+                textView.textStorage?.insert(NSAttributedString(string: text), at: insertpoint)
+                textView.textStorage!.addAttribute(.paragraphStyle, value: paragraph, range: range)
+                textView.textStorage?.addAttributes(typingAttributes, range: range)
             case .normal(.italic):
-                textView.typingAttributes = [NSAttributedStringKey.font:italic]
-            case .normal(.noitalic): textView.typingAttributes = [NSAttributedStringKey.font:fixedWidth]
-            case .normal(.bold): textView.typingAttributes = [NSAttributedStringKey.font:bold]
+                let font = typingAttributes[.font] as! NSFont
+                typingAttributes.updateValue(font.withTrait(trait: .italicFontMask), forKey: .font)
+            case .normal(.noitalic):
+                let font = typingAttributes[.font] as! NSFont
+                typingAttributes.updateValue(font.withTrait(trait: .unitalicFontMask), forKey: .font)
+            case .normal(.bold):
+                let font = typingAttributes[.font] as! NSFont
+                typingAttributes.updateValue(font.withTrait(trait: .boldFontMask), forKey: .font)
             case .normal(.nobold):
-                let font = manager.convert(textView.font!, toNotHaveTrait: .boldFontMask)
-                textView.typingAttributes = [.font: font]
+                let font = typingAttributes[.font] as! NSFont
+                typingAttributes.updateValue(font.withTrait(trait: .unboldFontMask), forKey: .font)
             case .normal(.underline):
-                textView.typingAttributes.updateValue(NSUnderlineStyle.styleSingle.rawValue, forKey: .underlineStyle)
+                typingAttributes.updateValue(NSUnderlineStyle.styleSingle.rawValue, forKey: .underlineStyle)
             case .normal(.nounderline):
-                textView.typingAttributes.removeValue(forKey: .underlineStyle)
+                typingAttributes.removeValue(forKey: .underlineStyle)
             case .normal(.plain):
-                textView.typingAttributes.removeValue(forKey: .underlineStyle)
                 let font = manager.convert(textView.font!, toNotHaveTrait: [.boldFontMask, .italicFontMask])
-                textView.typingAttributes = [.font: font]
+                typingAttributes.updateValue(font, forKey: .font)
+                typingAttributes.removeValue(forKey: .underlineStyle)
             case .normal(.link(let label, let node, _)):
                 // FIXME: System and REXX links must be discarded in a sensible way
                 // TODO: Register URL scheme
-                textView.typingAttributes.updateValue("url", forKey: .link)
-                textView.insertText("\(label) -> \(node)")
-                textView.typingAttributes.removeValue(forKey: .link)
+                typingAttributes[.link] = "url"
+                let text = NSAttributedString(string: "\(label) -> \(node)", attributes: typingAttributes)
+                textView.insertText(text)
+                typingAttributes.removeValue(forKey: .link)
             case .escaped(let escaped):
                 textView.insertText(escaped)
             case .normal(.amigaguide): textView.insertText("AmigaGuide®")
@@ -104,3 +126,9 @@ class ViewController: NSViewController {
     
 }
 
+extension NSFont {
+    func withTrait(trait:NSFontTraitMask) -> NSFont {
+        let new = NSFontManager.shared.convert(self, toHaveTrait: trait)
+        return new
+    }
+}
