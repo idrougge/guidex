@@ -70,6 +70,14 @@ class ViewController: NSViewController {
             case .global(.node(let node, let headline)):
                 textView.insertText("\(node): \(headline ?? "<nil>")")
                 textView.insertLineBreak(nil)
+            case .normal(.foreground(let pen)):
+                let pens:[String:NSColor] =
+                    ["detail":NSColor.brown, "text":.textColor, "block":.systemBlue, "shine":.gray,
+                     "shadow":.darkGray, "fill":.white, "filltext":.lightGray,
+                     "background":.textBackgroundColor,
+                     "highlighttext":.alternateSelectedControlTextColor]
+                guard let colour = pens[pen] else { break }
+                textView.typingAttributes.updateValue(colour, forKey: .foregroundColor)
             default:
                 textView.typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
                 textView.insertText(String(describing: token))
