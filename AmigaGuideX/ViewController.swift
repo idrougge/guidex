@@ -46,7 +46,10 @@ class ViewController: NSViewController {
                 textView.typingAttributes.updateValue(NSUnderlineStyle.styleSingle.rawValue, forKey: .underlineStyle)
             case .normal(.nounderline):
                 textView.typingAttributes.removeValue(forKey: .underlineStyle)
-            case .normal(.plain): textView.typingAttributes = [.font:fixedWidth]
+            case .normal(.plain):
+                textView.typingAttributes.removeValue(forKey: .underlineStyle)
+                let font = manager.convert(textView.font!, toNotHaveTrait: [.boldFontMask, .italicFontMask])
+                textView.typingAttributes = [.font: font]
             case .normal(.link(let label, let node, _)):
                 // FIXME: System and REXX links must be discarded in a sensible way
                 // TODO: Register URL scheme
@@ -72,8 +75,8 @@ class ViewController: NSViewController {
                 textView.insertLineBreak(nil)
             case .normal(.foreground(let pen)):
                 let pens:[String:NSColor] =
-                    ["detail":NSColor.brown, "text":.textColor, "block":.systemBlue, "shine":.gray,
-                     "shadow":.darkGray, "fill":.white, "filltext":.lightGray,
+                    ["detail":NSColor.brown, "text":.textColor, "block":.blue, "shine":.gray,
+                     "shadow":.darkGray, "fill":.systemBlue, "filltext":.lightGray,
                      "background":.textBackgroundColor,
                      "highlighttext":.alternateSelectedControlTextColor]
                 guard let colour = pens[pen] else { break }
