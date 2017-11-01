@@ -38,7 +38,7 @@ class ViewController: NSViewController {
         for token in parser.parseResult {
             switch token {
             case .newline, .normal(.linebreak):
-                textView.textStorage?.insert(NSAttributedString(string:"\n"), at: textView.textStorage!.length)
+                textView.textStorage?.insert(NSAttributedString(string:"\r\n"), at: textView.textStorage!.length)
             case .plaintext(let text):
                 let insertpoint = textView.textStorage!.length
                 let range = NSMakeRange(insertpoint, text.count)
@@ -73,8 +73,9 @@ class ViewController: NSViewController {
                 textView.insertText(text)
                 typingAttributes.removeValue(forKey: .link)
             case .escaped(let escaped):
-                textView.insertText(escaped)
-            case .normal(.amigaguide): textView.insertText("AmigaGuide®")
+                textView.textStorage?.append(NSAttributedString(string: escaped))
+            case .normal(.amigaguide):
+                textView.textStorage?.append(NSAttributedString(string: "AmigaGuide®"))
             case .normal(.lindent(let indentation)):
                 let p = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
                 p.headIndent = CGFloat(indentation*40)
@@ -149,13 +150,15 @@ class ViewController: NSViewController {
                 textView.insertParagraphSeparator(nil)
                 textView.alignRight(nil)
             case .global(.endnode):
+                textView.textStorage?.append(NSAttributedString(string: "\r\n"))
+                break
                 textView.insertParagraphSeparator(nil)
             case .global(.node(let node, let headline)):
                 textView.insertText("\(node): \(headline ?? "<nil>")")
                 textView.insertLineBreak(nil)
             case .normal(.foreground(let pen)):
                 let pens:[String:NSColor] =
-                    ["detail":NSColor.brown, "text":.textColor, "block":.blue, "shine":.gray,
+                    ["detail":.brown, "text":.textColor, "block":.blue, "shine":.gray,
                      "shadow":.darkGray, "fill":.systemBlue, "filltext":.lightGray,
                      "background":.textBackgroundColor,
                      "highlighttext":.alternateSelectedControlTextColor]
