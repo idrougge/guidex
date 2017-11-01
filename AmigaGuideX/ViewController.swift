@@ -24,18 +24,12 @@ class ViewController: NSViewController {
  */
         let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
         let manager = NSFontManager.shared
-        let italic = manager.convert(fixedWidth, toHaveTrait: NSFontTraitMask(rawValue: UInt(NSFontItalicTrait)))
-        let bold = manager.convert(fixedWidth, toHaveTrait: NSFontTraitMask.boldFontMask)
         textView.font = fixedWidth
         //let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         //paragraph.headIndent = 100.0
         //paragraph.firstLineHeadIndent = 100.0
-        textView.defaultParagraphStyle = paragraph
+        //textView.defaultParagraphStyle = paragraph
         textView.alignLeft(nil)
-        /*
-        NSFontManager.trait
-        NSFontMonoSpaceTrait
- */
         var typingAttributes = textView.typingAttributes
         typingAttributes.updateValue(fixedWidth, forKey: .font)
         textView.typingAttributes = typingAttributes
@@ -49,7 +43,7 @@ class ViewController: NSViewController {
                 let insertpoint = textView.textStorage!.length
                 let range = NSMakeRange(insertpoint, text.count)
                 textView.textStorage?.insert(NSAttributedString(string: text), at: insertpoint)
-                textView.textStorage!.addAttribute(.paragraphStyle, value: paragraph, range: range)
+                //textView.textStorage!.addAttribute(.paragraphStyle, value: paragraph, range: range)
                 textView.textStorage?.addAttributes(typingAttributes, range: range)
             case .normal(.italic):
                 let font = typingAttributes[.font] as! NSFont
@@ -81,13 +75,77 @@ class ViewController: NSViewController {
             case .escaped(let escaped):
                 textView.insertText(escaped)
             case .normal(.amigaguide): textView.insertText("AmigaGuide®")
+            case .normal(.lindent(let indentation)):
+                let p = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+                p.headIndent = CGFloat(indentation*40)
+                p.firstLineHeadIndent = CGFloat(indentation*40)
+                typingAttributes.updateValue(p, forKey: .paragraphStyle)
+                textView.textStorage?.append(NSAttributedString(string: "LINDENT \(indentation) \(textView.textStorage!.length) \(textView.textStorage!.paragraphs.count)"))
+                break
+                //paragraph.headIndent = 200.0
+                let lastParagraph = textView.textStorage!.paragraphs.last!
+                lastParagraph.addAttribute(.paragraphStyle, value: paragraph, range: NSRange.init(location: 0, length: lastParagraph.length))
+                lastParagraph.insert(NSAttributedString(string: "LINDENT \(indentation) \(lastParagraph.length) \(textView.textStorage!.paragraphs.count)"), at: 0)
+                break
+                textView.insertText("<LINDENT \(indentation) (\(paragraph.firstLineHeadIndent) \(paragraph.headIndent))")
+                setIndentation(to: indentation, in: textView)
+                textView.insertText(">LINDENT \(indentation) (\(paragraph.firstLineHeadIndent) \(paragraph.headIndent))")
+                break
+                let level = CGFloat(indentation*10)
+                paragraph.headIndent = level
+                paragraph.firstLineHeadIndent = level
+                //paragraph.tailIndent = 200.0
+                
+                textView.insertParagraphSeparator(nil)
+                textView.defaultParagraphStyle = paragraph // Unless default paragraph style is reassigned, no change is visible
+                textView.alignLeft(nil) // Unless alignment is set, indentation is not respected for first line
+                textView.insertText("LINDENT \(indentation) (\(level))")
+                
+            case .normal(.code):
+                // TODO: Turn off word wrapping
+                paragraph.lineBreakMode = .byTruncatingTail
+                paragraph.tailIndent = 200.0
+                break
+            case .normal(.pari(let indentation)):
+                textView.textStorage?.append(NSAttributedString(string: "PARI \(indentation)"))
+                break
+                textView.insertText("PARI \(indentation)")
+                //let paragraph = NSMutableParagraphStyle()
+                //paragraph.headIndent = CGFloat(indentation*40)
+                //paragraph.firstLineHeadIndent = CGFloat(indentation*40)
+                paragraph.headIndent = 20
+                paragraph.firstLineHeadIndent = CGFloat(indentation*10)
+                paragraph.tailIndent = 0
+                textView.insertParagraphSeparator(nil)
+                textView.defaultParagraphStyle = paragraph
+                textView.insertText("PARI \(indentation)")
+            case .normal(.pard):
+                typingAttributes.removeValue(forKey: .foregroundColor)
+                paragraph.headIndent = 0
+                paragraph.firstLineHeadIndent = 0
+                break
+                setIndentation(to: 0, in: textView)
+                textView.insertText("PARD (\(paragraph.firstLineHeadIndent) \(paragraph.headIndent))")
+                break
+                paragraph.headIndent = 0
+                paragraph.firstLineHeadIndent = 0
+                textView.insertParagraphSeparator(nil)
+                textView.defaultParagraphStyle = paragraph
+                textView.alignLeft(nil)
+                textView.insertText("PARD")
             case .normal(.jcenter):
+                paragraph.alignment = .center
+                break
                 textView.insertParagraphSeparator(nil)
                 textView.alignCenter(nil)
             case .normal(.jleft):
+                paragraph.alignment = .left
+                break
                 textView.insertParagraphSeparator(nil)
                 textView.alignLeft(nil)
             case .normal(.jright):
+                paragraph.alignment = .right
+                break
                 textView.insertParagraphSeparator(nil)
                 textView.alignRight(nil)
             case .global(.endnode):
@@ -102,7 +160,11 @@ class ViewController: NSViewController {
                      "background":.textBackgroundColor,
                      "highlighttext":.alternateSelectedControlTextColor]
                 guard let colour = pens[pen] else { break }
-                textView.typingAttributes.updateValue(colour, forKey: .foregroundColor)
+                typingAttributes.updateValue(colour, forKey: .foregroundColor)
+            /*
+            case .normal(.settabs(_)):
+                paragraph.tabStops
+             */
             default:
                 textView.typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
                 textView.insertText(String(describing: token))
@@ -115,6 +177,17 @@ class ViewController: NSViewController {
         textView.insertText("SLUT")
     }
 
+    func setIndentation(to indentation:Int, in textView:NSTextView) {
+        let level = CGFloat(indentation * 10)
+        paragraph.headIndent = level
+        paragraph.firstLineHeadIndent = level
+        //paragraph.tailIndent = 200.0
+        textView.insertParagraphSeparator(nil)
+        //textView.textStorage!.addAttribute(.paragraphStyle, value: paragraph, range: NSRange.init(location: textView.textStorage!.length-1, length: 1))
+        textView.defaultParagraphStyle = paragraph // Unless default paragraph style is reassigned, no change is visible
+        textView.alignLeft(nil) // Unless alignment is set, indentation is not respected for first line
+    }
+    
     override var representedObject: Any? {
         didSet {
         // Update the view, if already loaded.
