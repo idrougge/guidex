@@ -70,7 +70,8 @@ class ViewController: NSViewController {
                 // TODO: Register URL scheme
                 typingAttributes[.link] = "url"
                 let text = NSAttributedString(string: "\(label) -> \(node)", attributes: typingAttributes)
-                textView.insertText(text)
+                textView.textStorage?.append(text)
+                //textView.insertText(text)
                 typingAttributes.removeValue(forKey: .link)
             case .escaped(let escaped):
                 textView.textStorage?.append(NSAttributedString(string: escaped))
