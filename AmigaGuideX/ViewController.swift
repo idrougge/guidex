@@ -101,8 +101,7 @@ class ViewController: NSViewController {
             case .normal(.amigaguide):
                 textView.textStorage?.append(NSAttributedString(string: "AmigaGuide®", attributes: typingAttributes))
             case .normal(.lindent(let indentation)):
-                let spaces = String.init(repeating: " ", count: indentation)
-                let width = spaces.size(withAttributes: typingAttributes).width
+                let width = tabSize(spaces: indentation, attributes: typingAttributes)
                 let p = self.paragraph.mutableCopy() as! NSMutableParagraphStyle
                 p.headIndent = width
                 p.firstLineHeadIndent = width
@@ -156,6 +155,10 @@ class ViewController: NSViewController {
         }
     }
 
+    func tabSize(spaces:Int, attributes:[NSAttributedStringKey:Any]) -> CGFloat {
+        return String(repeating: " ", count: spaces).size(withAttributes: attributes).width
+    }
+    
     func setIndentation(to indentation:Int, in textView:NSTextView) {
         let level = CGFloat(indentation * 10)
         paragraph.headIndent = level
