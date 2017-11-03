@@ -143,10 +143,17 @@ class ViewController: NSViewController {
                      "highlighttext":.alternateSelectedControlTextColor]
                 guard let colour = pens[pen] else { break }
                 typingAttributes.updateValue(colour, forKey: .foregroundColor)
-            /*
-            case .normal(.settabs(_)):
-                paragraph.tabStops
-             */
+            case .normal(.settabs(let tabs)):
+                let paragraph = self.paragraph.mutableCopy() as! NSMutableParagraphStyle
+                paragraph.tabStops = tabs
+                    .map{tab in tabSize(spaces: tab, attributes: typingAttributes)}
+                    .map{location in NSTextTab(type: .leftTabStopType, location: location)}
+                typingAttributes.updateValue(paragraph, forKey: .paragraphStyle)
+            case .normal(.cleartabs):
+                let p = typingAttributes[.paragraphStyle] as? NSMutableParagraphStyle ?? self.paragraph
+                let paragraph = p.mutableCopy() as! NSMutableParagraphStyle
+                paragraph.tabStops = self.paragraph.tabStops
+                typingAttributes[.paragraphStyle] = paragraph
             default:
                 typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
                 textView.textStorage?.append(NSAttributedString(string: String(describing: token), attributes: typingAttributes))
