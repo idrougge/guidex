@@ -190,10 +190,3 @@ class ViewController: NSViewController {
     }
     
 }
-
-extension NSFont {
-    func withTrait(trait:NSFontTraitMask) -> NSFont {
-        let new = NSFontManager.shared.convert(self, toHaveTrait: trait)
-        return new
-    }
-}
