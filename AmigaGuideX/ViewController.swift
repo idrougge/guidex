@@ -22,8 +22,17 @@ class ViewController: NSViewController {
             textView.font = NSFont.systemFont(ofSize: 12).fontDescriptor.withSymbolicTraits(NSFontDescriptor.SymbolicTraits.monoSpace)
         }
  */
+        //let fixedWidth = NSFont(name: "TopazPlus a600a1200a4000", size: 14)
         let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
         let manager = NSFontManager.shared
+        textView.enclosingScrollView?.hasHorizontalScroller = true
+        /*
+        textView.maxSize = NSMakeSize(CGFloat.greatestFiniteMagnitude, CGFloat.greatestFiniteMagnitude)
+        textView.textContainer?.containerSize = NSMakeSize(CGFloat.greatestFiniteMagnitude, CGFloat.greatestFiniteMagnitude)
+        textView.isHorizontallyResizable = true
+        textView.textContainer?.widthTracksTextView = true
+        paragraph.lineBreakMode = .byWordWrapping
+         */
         /*
         let storage = textView.textStorage!
         var atts = [NSAttributedStringKey:Any]()
@@ -46,12 +55,10 @@ class ViewController: NSViewController {
         //paragraph.headIndent = 100.0
         //paragraph.firstLineHeadIndent = 100.0
         //textView.defaultParagraphStyle = paragraph
-        textView.alignLeft(nil)
         var typingAttributes = textView.typingAttributes
         typingAttributes.updateValue(fixedWidth, forKey: .font)
-        textView.typingAttributes = typingAttributes
-        textView.textStorage?.addAttributes(typingAttributes, range: NSMakeRange(0, 0) )
         let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
+        
         for token in parser.parseResult {
             switch token {
             case .newline, .normal(.linebreak):
@@ -111,6 +118,7 @@ class ViewController: NSViewController {
                 // TODO: Turn off word wrapping
                 let paragraph = self.paragraph.mutableCopy() as! NSMutableParagraphStyle
                 paragraph.lineBreakMode = .byTruncatingTail
+                paragraph.lineBreakMode = .byClipping
                 typingAttributes[.paragraphStyle] = paragraph
             case .normal(.pari(let indentation)):
                 textView.textStorage?.append(NSAttributedString(string: "PARI \(indentation)", attributes: typingAttributes))
@@ -166,17 +174,6 @@ class ViewController: NSViewController {
         return String(repeating: " ", count: spaces).size(withAttributes: attributes).width
     }
     
-    func setIndentation(to indentation:Int, in textView:NSTextView) {
-        let level = CGFloat(indentation * 10)
-        paragraph.headIndent = level
-        paragraph.firstLineHeadIndent = level
-        //paragraph.tailIndent = 200.0
-        textView.insertParagraphSeparator(nil)
-        //textView.textStorage!.addAttribute(.paragraphStyle, value: paragraph, range: NSRange.init(location: textView.textStorage!.length-1, length: 1))
-        textView.defaultParagraphStyle = paragraph // Unless default paragraph style is reassigned, no change is visible
-        textView.alignLeft(nil) // Unless alignment is set, indentation is not respected for first line
-    }
-    
     override var representedObject: Any? {
         didSet {
         // Update the view, if already loaded.
@@ -184,6 +181,12 @@ class ViewController: NSViewController {
     }
 
     @IBAction func didPressButton(_ sender: NSButton) {
+    }
+    @IBAction func didPressPrevious(_ sender: NSButton) {
+    }
+    @IBAction func didPressNext(_ sender: NSButton) {
+    }
+    @IBAction func didPressContents(_ sender: Any) {
     }
     
 }
