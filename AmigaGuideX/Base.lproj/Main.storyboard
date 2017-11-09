@@ -746,14 +746,62 @@
                                     <action selector="didPressButton:" target="XfG-lQ-9wD" id="1rG-iw-sbN"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KAp-G2-OoT">
+                                <rect key="frame" x="14" y="-2" width="96" height="32"/>
+                                <buttonCell key="cell" type="push" title="Contents" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ATU-vJ-RcE">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="didPressContents:" target="XfG-lQ-9wD" id="DOv-KK-FxW"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vDu-44-nx8">
+                                <rect key="frame" x="110" y="-2" width="73" height="32"/>
+                                <buttonCell key="cell" type="push" title="Index" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aup-Ni-Zay">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="didPressButton:" target="XfG-lQ-9wD" id="D97-7l-EAH"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CWc-2c-a8w">
+                                <rect key="frame" x="183" y="-2" width="93" height="32"/>
+                                <buttonCell key="cell" type="push" title="Previous" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2JP-lW-tXm">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="didPressPrevious:" target="XfG-lQ-9wD" id="AeI-sD-ege"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Kj-ed-XBJ">
+                                <rect key="frame" x="276" y="-2" width="69" height="32"/>
+                                <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Rsz-Cn-fgp">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="didPressNext:" target="XfG-lQ-9wD" id="Ura-aI-n3u"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="vDu-44-nx8" firstAttribute="baseline" secondItem="CWc-2c-a8w" secondAttribute="baseline" id="2VI-zQ-vOd"/>
+                            <constraint firstItem="KAp-G2-OoT" firstAttribute="baseline" secondItem="vDu-44-nx8" secondAttribute="baseline" id="4Sm-ag-ySe"/>
                             <constraint firstAttribute="bottom" secondItem="3U6-Mj-K2p" secondAttribute="bottom" constant="5" id="8om-9f-kn4"/>
                             <constraint firstItem="boU-dm-sbp" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="A5l-JX-i4M"/>
+                            <constraint firstItem="4Kj-ed-XBJ" firstAttribute="leading" secondItem="CWc-2c-a8w" secondAttribute="trailing" constant="12" symbolic="YES" id="AQo-Li-8S3"/>
+                            <constraint firstItem="CWc-2c-a8w" firstAttribute="leading" secondItem="vDu-44-nx8" secondAttribute="trailing" constant="12" symbolic="YES" id="C3W-kP-CSr"/>
                             <constraint firstItem="boU-dm-sbp" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="FK7-eG-JQR"/>
                             <constraint firstItem="3U6-Mj-K2p" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="NvR-fU-Ffs"/>
                             <constraint firstAttribute="trailing" secondItem="3U6-Mj-K2p" secondAttribute="trailing" constant="8" id="QMd-hY-rzO"/>
                             <constraint firstItem="3U6-Mj-K2p" firstAttribute="top" secondItem="boU-dm-sbp" secondAttribute="bottom" constant="7" id="Wlg-dT-xvC"/>
+                            <constraint firstItem="CWc-2c-a8w" firstAttribute="baseline" secondItem="4Kj-ed-XBJ" secondAttribute="baseline" id="dXr-3Y-sTz"/>
+                            <constraint firstItem="KAp-G2-OoT" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="f0Z-e1-E2x"/>
+                            <constraint firstItem="4Kj-ed-XBJ" firstAttribute="baseline" secondItem="3U6-Mj-K2p" secondAttribute="baseline" id="hT2-Re-KOG"/>
+                            <constraint firstItem="vDu-44-nx8" firstAttribute="leading" secondItem="KAp-G2-OoT" secondAttribute="trailing" constant="12" symbolic="YES" id="kYr-h2-drv"/>
                             <constraint firstItem="boU-dm-sbp" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="pAT-GU-4sj"/>
                         </constraints>
                     </view>

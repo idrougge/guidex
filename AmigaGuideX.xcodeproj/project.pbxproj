@@ -15,6 +15,7 @@
 		DC591CDF1F8D57D300351E22 /* AmigaGuideXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CDE1F8D57D300351E22 /* AmigaGuideXUITests.swift */; };
 		DC591CED1F8D5B0400351E22 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CEC1F8D5B0400351E22 /* Parser.swift */; };
 		DC591CEF1F8D5FDC00351E22 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC591CEE1F8D5FDC00351E22 /* String+Extension.swift */; };
+		DCEDF9231FAE015C00BF2160 /* NSFont+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEDF9221FAE015C00BF2160 /* NSFont+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		DC591CE01F8D57D300351E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC591CEC1F8D5B0400351E22 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 		DC591CEE1F8D5FDC00351E22 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		DCEDF9221FAE015C00BF2160 /* NSFont+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSFont+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 				DC591CC01F8D57D300351E22 /* AppDelegate.swift */,
 				DC591CC21F8D57D300351E22 /* ViewController.swift */,
 				DC591CEC1F8D5B0400351E22 /* Parser.swift */,
+				DCEDF9221FAE015C00BF2160 /* NSFont+Extension.swift */,
 				DC591CEE1F8D5FDC00351E22 /* String+Extension.swift */,
 				DC591CC41F8D57D300351E22 /* Assets.xcassets */,
 				DC591CC61F8D57D300351E22 /* Main.storyboard */,
@@ -271,6 +274,7 @@
 				DC591CEF1F8D5FDC00351E22 /* String+Extension.swift in Sources */,
 				DC591CC31F8D57D300351E22 /* ViewController.swift in Sources */,
 				DC591CC11F8D57D300351E22 /* AppDelegate.swift in Sources */,
+				DCEDF9231FAE015C00BF2160 /* NSFont+Extension.swift in Sources */,
 				DC591CED1F8D5B0400351E22 /* Parser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
