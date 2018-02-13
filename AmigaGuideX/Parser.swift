@@ -7,6 +7,25 @@
 //
 import Foundation
 
+class Node {
+    let name:String
+    let headline:String?
+    let prev:Node? // lazy?
+    let next:Node?
+    let contents:[AmigaGuide.Tokens]
+    
+    init?(_ node:AmigaGuide.ToplevelTokens?) {
+        guard let node = node, case let .node_(name, headline, next, prev, contents) = node else {
+            return nil
+        }
+        self.name = name
+        self.headline = headline
+        self.prev = Node(prev)
+        self.next = Node(next)
+        self.contents = contents
+    }
+}
+
 struct AmigaGuide {
     indirect enum Tokens {
         case global(ToplevelTokens)
@@ -15,7 +34,7 @@ struct AmigaGuide {
         case escaped(String)
         case newline // Motsvaras även av Texttokens.linebreak
         // Här borde finnas ett case node([Tokens])
-        case bla(Tokens)
+        case node(ToplevelTokens)
     }
     enum ToplevelTokens {
         case database(String)   // name of DATABASE
@@ -23,6 +42,7 @@ struct AmigaGuide {
         case endnode
         case prev(String) // PREV has pointer to next nodename
         case next(String) // NEXT has pointer to next nodename
+        indirect case node_(name:String, headline: String?, next:ToplevelTokens?, prev:ToplevelTokens?, contents:[AmigaGuide.Tokens])
         case title(String)
         case wordwrap
         case smartwrap
@@ -154,15 +174,27 @@ class Parser {
     
     init(file:String) {
         let fileURL = URL(fileURLWithPath: NSHomeDirectory() + file)
-        print("NSHomeDirectory()",NSHomeDirectory())
-        
         let fileString = try! String(contentsOf: fileURL, encoding: .isoLatin1)
         let lines = fileString.components(separatedBy: .newlines)
         for line in lines {
             parseAppend(line)
         }
     }
-    
+    func parseNode(_ line:String) {
+        // TODO: Globals should be stored inside each node because they may change between nodes
+        print(#function, line)
+        let line = unescape(line)
+        print("unescaped:", line)
+        
+        // Look for end of node first?
+    }
+    func unescape(_ line:String) -> String {
+        if let backslash = line.index(of: "\\") {
+            let escaped = line.index(after: backslash)
+            return line + unescape(String(line[escaped...]))
+        }
+        return line
+    }
     func parseAppend(_ line:String) {
         if let backslash = line.index(of: "\\") {
             // FIXME: \n (newline) is rendered as "n"
@@ -171,7 +203,6 @@ class Parser {
             let escaped = line.index(after: backslash)
             parseResult.append(.escaped(String(line[escaped])))
             parseAppend(String(line[line.index(after: escaped)...]))
-            //fatalError("Hittade escapetecken: "+line)
             return
         }
         guard let at = line.index(of: "@") else {
