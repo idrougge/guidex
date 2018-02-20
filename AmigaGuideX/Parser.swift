@@ -193,6 +193,9 @@ class Parser {
         while start < contents.endIndex {
             let (t, pos) = getTokens(contents, from: start)
             print(pos,t)
+            if let token = t {
+                parseResult.append(token)
+            }
             start = pos
         }
     }
