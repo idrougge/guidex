@@ -174,10 +174,47 @@ class Parser {
     
     init(file:String) {
         let fileURL = URL(fileURLWithPath: NSHomeDirectory() + file)
-        let fileString = try! String(contentsOf: fileURL, encoding: .isoLatin1)
+        // FIXME: Handle error instead of forcing try
+        let fileContents = try! String(contentsOf: fileURL, encoding: .isoLatin1)
+        parseFile(fileContents)
+        /*
         let lines = fileString.components(separatedBy: .newlines)
         for line in lines {
             parseAppend(line)
+        }
+         */
+    }
+    func parseFile(_ contents:String) {
+        let start = contents.startIndex
+        var arr:[String] = []
+        arr.append("")
+        getTokens(contents, from: start)
+    }
+    func getTokens(_ contents:String, from:String.Index) {
+        let contents = contents[from...]
+        guard from < contents.endIndex else { return }
+        guard let mark = contents.index(of: "@") else { return /* return rest of contents */ }
+        guard mark > from else {
+            let text = String(contents[from ..< mark])
+            let _ = AmigaGuide.Tokens.plaintext(text)
+            return // return token and mark as new starting position
+        }
+        switch contents[contents.index(after: mark)] {
+        case "{":
+            guard let endmark = contents.index(of: "}") else { fatalError() }
+            let text = contents[mark ..< endmark]
+            if let token = AmigaGuide.TextTokens(String(text)) {
+                let _ = AmigaGuide.Tokens.normal(token)
+                return
+            }
+            return
+        default:
+            guard let endofline = contents.index(of: "\n") else { return }
+            let text = contents[mark ..< endofline]
+            let token = AmigaGuide.ToplevelTokens(str: String(text))
+            let from = contents.index(after: endofline)
+            let _ = (token, from)
+            return
         }
     }
     func parseNode(_ line:String) {
