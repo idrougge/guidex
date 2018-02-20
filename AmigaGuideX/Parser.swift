@@ -192,7 +192,7 @@ class Parser {
         //getTokens(contents, from: start)
         while start < contents.endIndex {
             let (t, pos) = getTokens(contents, from: start)
-            print(pos,t)
+            print(pos,t ?? "<NIL>")
             if let token = t {
                 parseResult.append(token)
             }
@@ -221,7 +221,8 @@ class Parser {
             let text = contents[mark ..< endmark]
             if let token = AmigaGuide.TextTokens(String(text)) {
                 let token = AmigaGuide.Tokens.normal(token)
-                return (token,endmark)
+                let next = contents.index(after: endmark)
+                return (token,next)
             }
             return (nil, endmark)
         default:
