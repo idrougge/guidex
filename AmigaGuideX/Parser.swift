@@ -124,31 +124,31 @@ struct AmigaGuide {
         init?(_ str:String) {
             guard let tok = str.splitFirstWord() else { return nil }
             switch tok.pre.lowercased() {
-            case "b": self = .bold
-            case "ub": self = .nobold
-            case "i": self = .italic
-            case "ui": self = .noitalic
-            case "u": self = .underline
-            case "uu": self = .nounderline
-            case "amigaguide": self = .amigaguide
-            case "cleartabs": self = .cleartabs
-            case "code": self = .code
-            case "jcenter": self = .jcenter
-            case "jleft": self = .jleft
-            case "jright": self = .jright
-            case "line": self = .linebreak
-            case "par": self = .par
-            case "pard": self = .pard
-            case "plain": self = .plain
+            case "@{b": self = .bold
+            case "@{ub": self = .nobold
+            case "@{i": self = .italic
+            case "@{ui": self = .noitalic
+            case "@{u": self = .underline
+            case "@{uu": self = .nounderline
+            case "@{amigaguide": self = .amigaguide
+            case "@{cleartabs": self = .cleartabs
+            case "@{code": self = .code
+            case "@{jcenter": self = .jcenter
+            case "@{jleft": self = .jleft
+            case "@{jright": self = .jright
+            case "@{line": self = .linebreak
+            case "@{par": self = .par
+            case "@{pard": self = .pard
+            case "@{plain": self = .plain
             default:
                 switch (tok.pre, tok.rest) {
-                case ("bg",let pen?): self = .background(pen)
-                case ("fg",let pen?): self = .foreground(pen)
-                case ("lindent", let size?): self = .lindent(Int(size) ?? 0)
-                case ("pari", let size?): self = .pari(Int(size) ?? 0)
-                case ("settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).flatMap(Int.init)
+                case ("@{bg",let pen?): self = .background(pen)
+                case ("@{fg",let pen?): self = .foreground(pen)
+                case ("@{lindent", let size?): self = .lindent(Int(size) ?? 0)
+                case ("@{pari", let size?): self = .pari(Int(size) ?? 0)
+                case ("@{settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).flatMap(Int.init)
                 self = .settabs(sizes)
-                case ("\"", _?):
+                case ("@{\"", _?):
                     guard let regex = try? NSRegularExpression(pattern: "^\"(.+)\"\\s(.+)\\s\\\"(.+)\\\"", options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
                         match.numberOfRanges == 4
@@ -185,36 +185,54 @@ class Parser {
          */
     }
     func parseFile(_ contents:String) {
-        let start = contents.startIndex
+        print(#function)
+        var start = contents.startIndex
         var arr:[String] = []
         arr.append("")
-        getTokens(contents, from: start)
-    }
-    func getTokens(_ contents:String, from:String.Index) {
-        let contents = contents[from...]
-        guard from < contents.endIndex else { return }
-        guard let mark = contents.index(of: "@") else { return /* return rest of contents */ }
-        guard mark > from else {
-            let text = String(contents[from ..< mark])
-            let _ = AmigaGuide.Tokens.plaintext(text)
-            return // return token and mark as new starting position
+        //getTokens(contents, from: start)
+        while start < contents.endIndex {
+            let (t, pos) = getTokens(contents, from: start)
+            print(pos,t)
+            start = pos
         }
+    }
+    func getTokens(_ contents:String, from:String.Index) -> (AmigaGuide.Tokens?, String.Index) {
+        let contents = contents[from...]
+        //print(#function, from, String(contents))
+        guard from < contents.endIndex else { return (nil, from) }
+        guard let mark = contents.index(of: "@") else {
+            let text = String(contents[from...])
+            let token = AmigaGuide.Tokens.plaintext(text)
+            return (token, contents.endIndex) /* return rest of contents */
+        }
+        guard mark == from else {
+            // FIXME: Should ignore outside of nodes
+            let text = String(contents[from ..< mark])
+            let token = AmigaGuide.Tokens.plaintext(text)
+            return (token, mark) // return token and mark as new starting position
+        }
+        //print(#function, from, String(contents))
         switch contents[contents.index(after: mark)] {
         case "{":
             guard let endmark = contents.index(of: "}") else { fatalError() }
             let text = contents[mark ..< endmark]
             if let token = AmigaGuide.TextTokens(String(text)) {
-                let _ = AmigaGuide.Tokens.normal(token)
-                return
+                let token = AmigaGuide.Tokens.normal(token)
+                return (token,endmark)
             }
-            return
+            return (nil, endmark)
         default:
-            guard let endofline = contents.index(of: "\n") else { return }
-            let text = contents[mark ..< endofline]
-            let token = AmigaGuide.ToplevelTokens(str: String(text))
+            guard let endofline = contents.index(of: "\n") else {
+                return (nil,contents.endIndex)
+            }
+            let start = contents.index(after: mark)
+            let text = contents[start ..< endofline]
             let from = contents.index(after: endofline)
-            let _ = (token, from)
-            return
+            if let token = AmigaGuide.ToplevelTokens(str: String(text)) {
+                let token = AmigaGuide.Tokens.global(token)
+                return (token, from)
+            }
+            return (nil, from)
         }
     }
     func parseNode(_ line:String) {
