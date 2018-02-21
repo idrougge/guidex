@@ -149,7 +149,7 @@ struct AmigaGuide {
                 case ("@{settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).flatMap(Int.init)
                 self = .settabs(sizes)
                 case ("@{\"", _?):
-                    guard let regex = try? NSRegularExpression(pattern: "^\\@\\{\"(.+)\"\\s(.+)\\s\\\"(.+)\\\"", options: []),
+                    guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(.+)\\s\\\"(.+)\\\"", options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
                         match.numberOfRanges == 4
                         else { return nil }
