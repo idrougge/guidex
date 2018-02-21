@@ -189,10 +189,13 @@ class Parser {
         var start = contents.startIndex
         var arr:[String] = []
         arr.append("")
-        //getTokens(contents, from: start)
         while start < contents.endIndex {
-            let (t, pos) = getTokens(contents, from: start)
+            let (t, pos):(AmigaGuide.Tokens?, String.Index) = getTokens(contents, from: start)
             print(pos,t ?? "<NIL>")
+            if let t = t, case let AmigaGuide.Tokens.global(token) = t, case let AmigaGuide.ToplevelTokens.node(name, _) = token {
+                print("Found node:", name)
+                //_=parseResult.filter{ $0 == case AmigaGuide.Tokens.newline }
+            }
             if let token = t {
                 parseResult.append(token)
             }
