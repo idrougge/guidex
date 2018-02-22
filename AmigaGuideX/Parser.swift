@@ -194,7 +194,9 @@ class Parser {
             print(pos,t ?? "<NIL>")
             if let t = t, case let AmigaGuide.Tokens.global(token) = t, case let AmigaGuide.ToplevelTokens.node(name, _) = token {
                 print("Found node:", name)
-                //_=parseResult.filter{ $0 == case AmigaGuide.Tokens.newline }
+                repeat {
+                    //
+                } while false // let tt = t
             }
             if let token = t {
                 parseResult.append(token)
@@ -203,6 +205,7 @@ class Parser {
         }
     }
     func getTokens(_ contents:String, from:String.Index) -> (AmigaGuide.Tokens?, String.Index) {
+        let contents_copy = contents
         let contents = contents[from...]
         //print(#function, from, String(contents))
         guard from < contents.endIndex else { return (nil, from) }
@@ -235,6 +238,21 @@ class Parser {
             let start = contents.index(after: mark)
             let text = contents[start ..< endofline]
             let from = contents.index(after: endofline)
+            if text.starts(with: "endnode") {
+                print("Text starts with 'endnode'")
+            }
+            if text.starts(with: "node") {
+                print("Text starts with 'node'")
+                var pos = from
+                repeat {
+                    let (t,p) = getTokens(contents_copy, from: pos)
+                    pos = p
+                    if let t = t, case AmigaGuide.Tokens.global(let token) = t, case .endnode = token {
+                        print("Found end node token at", p)
+                        return (t, p)
+                    }
+                } while true //p > from
+            }
             if let token = AmigaGuide.ToplevelTokens(str: String(text)) {
                 let token = AmigaGuide.Tokens.global(token)
                 return (token, from)
