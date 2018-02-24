@@ -34,7 +34,8 @@ struct AmigaGuide {
         case escaped(String)
         case newline // Motsvaras även av Texttokens.linebreak
         // Här borde finnas ett case node([Tokens])
-        case node(ToplevelTokens)
+        //case node(ToplevelTokens)
+        case node(name:String, title:String?, contents:[Tokens])
     }
     enum ToplevelTokens {
         case database(String)   // name of DATABASE
@@ -241,15 +242,22 @@ class Parser {
             if text.starts(with: "endnode") {
                 print("Text starts with 'endnode'")
             }
-            if text.starts(with: "node") {
-                print("Text starts with 'node'")
+            if text.starts(with: "node"), let node = AmigaGuide.ToplevelTokens(str: String(text)), case let AmigaGuide.ToplevelTokens.node(name, title) = node {
+                print("Text starts with 'node' and is node \(node)")
                 var pos = from
+                //var (_,p) = getTokens(contents_copy, from: from)
+                var arr = [AmigaGuide.Tokens]()
                 repeat {
                     let (t,p) = getTokens(contents_copy, from: pos)
                     pos = p
-                    if let t = t, case AmigaGuide.Tokens.global(let token) = t, case .endnode = token {
-                        print("Found end node token at", p)
-                        return (t, p)
+                    if let t = t {
+                        arr.append(t)
+                        if case AmigaGuide.Tokens.global(let token) = t, case .endnode = token {
+                            print("Found end node token at", p)
+                            //return (t, p)
+                            let n = AmigaGuide.Tokens.node(name: name, title: title, contents: arr)
+                            return (n,p)
+                        }
                     }
                 } while true //p > from
             }
