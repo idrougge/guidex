@@ -7,25 +7,6 @@
 //
 import Foundation
 
-class Node {
-    let name:String
-    let headline:String?
-    let prev:Node? // lazy?
-    let next:Node?
-    let contents:[AmigaGuide.Tokens]
-    
-    init?(_ node:AmigaGuide.ToplevelTokens?) {
-        guard let node = node, case let .node_(name, headline, next, prev, contents) = node else {
-            return nil
-        }
-        self.name = name
-        self.headline = headline
-        self.prev = Node(prev)
-        self.next = Node(next)
-        self.contents = contents
-    }
-}
-
 struct AmigaGuide {
     indirect enum Tokens {
         case global(ToplevelTokens)
@@ -252,6 +233,7 @@ class Parser {
                     pos = p
                     if let t = t {
                         arr.append(t)
+                        // TODO: Scan for @TITLE tag and insert into node
                         if case AmigaGuide.Tokens.global(let token) = t, case .endnode = token {
                             print("Found end node token at", p)
                             //return (t, p)

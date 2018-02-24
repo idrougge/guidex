@@ -8,10 +8,28 @@
 
 import Cocoa
 
+class Node {
+    let name:String
+    let headline:String?
+    //let prev:String?//Node? // lazy?
+    //let next:String?//Node?
+    let contents:[AmigaGuide.Tokens]
+    
+    init?(_ node:AmigaGuide.Tokens?) {
+        guard let node = node, case let .node(name: name, title: title, contents: contents) = node else {
+            return nil
+        }
+        self.name = name
+        self.headline = title
+        self.contents = contents
+    }
+}
+
 class ViewController: NSViewController {
 
     @IBOutlet var textView: NSTextView!
     let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+    let manager = NSFontManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,43 +42,33 @@ class ViewController: NSViewController {
  */
         //let fixedWidth = NSFont(name: "TopazPlus a600a1200a4000", size: 14)
         let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
-        let manager = NSFontManager.shared
+        
         textView.enclosingScrollView?.hasHorizontalScroller = true
-        /*
-        textView.maxSize = NSMakeSize(CGFloat.greatestFiniteMagnitude, CGFloat.greatestFiniteMagnitude)
-        textView.textContainer?.containerSize = NSMakeSize(CGFloat.greatestFiniteMagnitude, CGFloat.greatestFiniteMagnitude)
-        textView.isHorizontallyResizable = true
-        textView.textContainer?.widthTracksTextView = true
-        paragraph.lineBreakMode = .byWordWrapping
-         */
-        /*
-        let storage = textView.textStorage!
-        var atts = [NSAttributedStringKey:Any]()
-        atts[.font] = fixedWidth
-        atts[.paragraphStyle] = paragraph
-        let str = NSAttributedString(string: "Hej", attributes: atts)
-        storage.append(str)
-        storage.append(NSAttributedString(string: "\r\n"))
-        paragraph.alignment = .right
-        let p2 = paragraph.mutableCopy() as! NSMutableParagraphStyle
-        p2.alignment = .center
-        atts[.paragraphStyle] = p2
-        atts[.font] = nil
-        storage.append(NSAttributedString(string: "Svejs", attributes: atts))
-        storage.append(NSAttributedString(string: "\r\n"))
-        return
-         */
-        //textView.font = fixedWidth
-        //let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-        //paragraph.headIndent = 100.0
-        //paragraph.firstLineHeadIndent = 100.0
-        //textView.defaultParagraphStyle = paragraph
+        
         var typingAttributes = textView.typingAttributes
         typingAttributes.updateValue(fixedWidth, forKey: .font)
         let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
+        parse(parser.parseResult, attributes: typingAttributes)
+        if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
+            parse(contents, attributes: typingAttributes)
+        }
+    }
+    
+    var allNodes:[String:AmigaGuide.Tokens] = [:]
+    var nextNode:String?
+    var precedingNode:String?
+    func parse(_ tokens:[AmigaGuide.Tokens], attributes:[NSAttributedStringKey:Any]) {
+        var typingAttributes = attributes
+        (nextNode, precedingNode) = (nil,nil)
         
-        for token in parser.parseResult {
+        for token in tokens {
             switch token {
+            case let .node(name: name, title: _, contents: _):
+                allNodes[name] = token
+            case .global(.next(let next)):
+                self.nextNode = next
+            case .global(.prev(let prev)):
+                self.precedingNode = prev
             case .newline, .normal(.linebreak):
                 textView.textStorage?.insert(NSAttributedString(string:"\r\n"), at: textView.textStorage!.length)
             case .plaintext(let text):
@@ -183,8 +191,18 @@ class ViewController: NSViewController {
     @IBAction func didPressButton(_ sender: NSButton) {
     }
     @IBAction func didPressPrevious(_ sender: NSButton) {
+        print(#function, precedingNode)
     }
     @IBAction func didPressNext(_ sender: NSButton) {
+        print(#function, nextNode)
+        guard let nextNode = nextNode,
+            let next = allNodes[nextNode],
+            case .node(name: _, title: _, contents: let contents) = next
+        else {
+            return
+        }
+        parse(contents, attributes: [:])
+        
     }
     @IBAction func didPressContents(_ sender: Any) {
     }
