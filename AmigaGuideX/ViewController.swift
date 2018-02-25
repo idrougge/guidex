@@ -31,8 +31,15 @@ class ViewController: NSViewController {
     let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
     let manager = NSFontManager.shared
     
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        print(#function, menuItem)
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Prutt"
+        //becomeFirstResponder()
         /*
         if #available(OSX 10.11, *) {
             textView.font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
@@ -47,7 +54,8 @@ class ViewController: NSViewController {
         
         var typingAttributes = textView.typingAttributes
         typingAttributes.updateValue(fixedWidth, forKey: .font)
-        let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
+        //let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
+        let parser = Parser(file: "/Desktop/System3.9/Locale/Help/svenska/Sys/amigaguide.guide")
         parse(parser.parseResult, attributes: typingAttributes)
         //if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
         if let main = allNodes["MAIN"] {
@@ -225,6 +233,9 @@ class ViewController: NSViewController {
         }
         parse(prev.contents, attributes: prev.typingAttributes)
         currentNode = prev.name
+    }
+    @IBAction func didSelectOpen(_ sender:NSMenuItem) {
+        print(#function, sender)
     }
     @IBAction func didPressNext(_ sender: NSButton) {
         print(#function, nextNode ?? "")
