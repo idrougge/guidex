@@ -250,59 +250,12 @@ class Parser {
             return (nil, from)
         }
     }
-    func parseNode(_ line:String) {
-        // TODO: Globals should be stored inside each node because they may change between nodes
-        print(#function, line)
-        let line = unescape(line)
-        print("unescaped:", line)
-        
-        // Look for end of node first?
-    }
     func unescape(_ line:String) -> String {
         if let backslash = line.index(of: "\\") {
             let escaped = line.index(after: backslash)
             return line + unescape(String(line[escaped...]))
         }
         return line
-    }
-    func parseAppend(_ line:String) {
-        if let backslash = line.index(of: "\\") {
-            // FIXME: \n (newline) is rendered as "n"
-            // FIXME: Escaped characters are followed by newline
-            parseAppend(String(line[..<backslash]))
-            let escaped = line.index(after: backslash)
-            parseResult.append(.escaped(String(line[escaped])))
-            parseAppend(String(line[line.index(after: escaped)...]))
-            return
-        }
-        guard let at = line.index(of: "@") else {
-            parseResult.append( .plaintext(line) )
-            parseResult.append( .newline )
-            return
-        }
-        if at > line.startIndex {
-            parseResult.append(.plaintext(String(line[..<at])))
-        }
-        if at == line.index(before: line.endIndex) {
-            fatalError(line)
-        }
-        let opening = line.index(after: at)
-        guard line[opening] == "{", let closing = line[opening...].index(of: "}") else {
-            if let token = AmigaGuide.ToplevelTokens(str: String(line[opening...])) {
-                parseResult.append( AmigaGuide.Tokens.global(token) )
-            } else {
-                parseResult.append( AmigaGuide.Tokens.plaintext(line) )
-            }
-            return
-        }
-        let tokstr = line[line.index(after: opening) ..< closing]
-        if let token = AmigaGuide.TextTokens(String(tokstr)) {
-            print(token)
-            parseResult.append(.normal(token))
-        }
-        let theRest = line[line.index(after: closing)...]
-        print(theRest)
-        parseAppend(String(theRest))
     }
 }
 
