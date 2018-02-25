@@ -13,9 +13,7 @@ struct AmigaGuide {
         case normal(TextTokens)
         case plaintext(String)
         case escaped(String)
-        case newline // Motsvaras även av Texttokens.linebreak
-        // Här borde finnas ett case node([Tokens])
-        //case node(ToplevelTokens)
+        case newline // Also Texttokens.linebreak
         case node(name:String, title:String?, contents:[Tokens])
     }
     enum ToplevelTokens {
@@ -159,27 +157,12 @@ class Parser {
         // FIXME: Handle error instead of forcing try
         let fileContents = try! String(contentsOf: fileURL, encoding: .isoLatin1)
         parseFile(fileContents)
-        /*
-        let lines = fileString.components(separatedBy: .newlines)
-        for line in lines {
-            parseAppend(line)
-        }
-         */
     }
     func parseFile(_ contents:String) {
         print(#function)
         var start = contents.startIndex
-        var arr:[String] = []
-        arr.append("")
         while start < contents.endIndex {
             let (t, pos):(AmigaGuide.Tokens?, String.Index) = getTokens(contents, from: start)
-            print(pos,t ?? "<NIL>")
-            if let t = t, case let AmigaGuide.Tokens.global(token) = t, case let AmigaGuide.ToplevelTokens.node(name, _) = token {
-                print("Found node:", name)
-                repeat {
-                    //
-                } while false // let tt = t
-            }
             if let token = t {
                 parseResult.append(token)
             }
@@ -220,11 +203,8 @@ class Parser {
             let start = contents.index(after: mark)
             let text = contents[start ..< endofline]
             let from = contents.index(after: endofline)
-            if text.starts(with: "endnode") {
-                print("Text starts with 'endnode'")
-            }
             if text.starts(with: "node"), let node = AmigaGuide.ToplevelTokens(str: String(text)), case let AmigaGuide.ToplevelTokens.node(name, title) = node {
-                print("Text starts with 'node' and is node \(node)")
+                //print("Text starts with 'node' and is node \(node)")
                 var pos = from
                 //var (_,p) = getTokens(contents_copy, from: from)
                 var arr = [AmigaGuide.Tokens]()
@@ -235,8 +215,7 @@ class Parser {
                         arr.append(t)
                         // TODO: Scan for @TITLE tag and insert into node
                         if case AmigaGuide.Tokens.global(let token) = t, case .endnode = token {
-                            print("Found end node token at", p)
-                            //return (t, p)
+                            // End of node found, return node token with contents
                             let n = AmigaGuide.Tokens.node(name: name, title: title, contents: arr)
                             return (n,p)
                         }
