@@ -192,6 +192,7 @@ class ViewController: NSViewController {
                 let paragraph = p.mutableCopy() as! NSMutableParagraphStyle
                 paragraph.tabStops = self.paragraph.tabStops
                 typingAttributes[.paragraphStyle] = paragraph
+            case .global(.remark): break
             default:
                 typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
                 textView.textStorage?.append(NSAttributedString(string: String(describing: token), attributes: typingAttributes))
