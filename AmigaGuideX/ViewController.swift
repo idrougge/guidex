@@ -25,7 +25,7 @@ class Node {
     }
 }
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, NSTextViewDelegate {
 
     @IBOutlet var textView: NSTextView!
     let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
@@ -35,10 +35,17 @@ class ViewController: NSViewController {
         print(#function, menuItem)
         return true
     }
-    
+    func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool {
+        print(#function, link, charIndex)
+        guard let link = link as? String, let node = allNodes[link] else { return false }
+        parse(node.contents, attributes: node.typingAttributes)
+        currentNode = node.name
+        self.view.window?.title = node.title ?? NSLocalizedString("Unnamed node", comment: "")
+        return true // Stop next responder from handling link
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Prutt"
+        textView.delegate = self
         //becomeFirstResponder()
         /*
         if #available(OSX 10.11, *) {
@@ -54,8 +61,8 @@ class ViewController: NSViewController {
         
         var typingAttributes = textView.typingAttributes
         typingAttributes.updateValue(fixedWidth, forKey: .font)
-        //let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
-        let parser = Parser(file: "/Desktop/System3.9/Locale/Help/svenska/Sys/amigaguide.guide")
+        let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
+        //let parser = Parser(file: "/Desktop/System3.9/Locale/Help/svenska/Sys/amigaguide.guide")
         parse(parser.parseResult, attributes: typingAttributes)
         //if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
         if let main = allNodes["MAIN"] {
@@ -129,7 +136,7 @@ class ViewController: NSViewController {
             case .normal(.link(let label, let node, _)):
                 // FIXME: System and REXX links must be discarded in a sensible way
                 // TODO: Register URL scheme
-                typingAttributes[.link] = "url"
+                typingAttributes[.link] = node
                 let text = NSAttributedString(string: "\(label) -> \(node)", attributes: typingAttributes)
                 textView.insertText(text)
                 typingAttributes.removeValue(forKey: .link)
