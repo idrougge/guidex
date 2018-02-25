@@ -8,20 +8,20 @@
 
 import Cocoa
 
+typealias TypingAttributes = [NSAttributedStringKey:Any]
 class Node {
     let name:String
-    let headline:String?
-    //let prev:String?//Node? // lazy?
-    //let next:String?//Node?
+    let title:String?
     let contents:[AmigaGuide.Tokens]
-    
-    init?(_ node:AmigaGuide.Tokens?) {
+    let typingAttributes:TypingAttributes
+    init?(_ node:AmigaGuide.Tokens?, attributes:TypingAttributes) {
         guard let node = node, case let .node(name: name, title: title, contents: contents) = node else {
             return nil
         }
         self.name = name
-        self.headline = title
+        self.title = title
         self.contents = contents
+        self.typingAttributes = attributes
     }
 }
 
@@ -49,22 +49,35 @@ class ViewController: NSViewController {
         typingAttributes.updateValue(fixedWidth, forKey: .font)
         let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
         parse(parser.parseResult, attributes: typingAttributes)
-        if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
-            parse(contents, attributes: typingAttributes)
+        //if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
+        if let main = allNodes["MAIN"] {
+            parse(main.contents, attributes: typingAttributes)
+            currentNode = main.name
         }
     }
     
-    var allNodes:[String:AmigaGuide.Tokens] = [:]
+    //var allNodes:[String:AmigaGuide.Tokens] = [:]
+    var allNodes:[String:Node] = [:]
+    /// Names of all nodes in order of appearance, for fetching
+    var nodeOrder:[String] = []
+    /// Name of @NEXT node
     var nextNode:String?
+    /// Name of @PREV node
     var precedingNode:String?
+    /// Name of current node
+    var currentNode:String?
+    
     func parse(_ tokens:[AmigaGuide.Tokens], attributes:[NSAttributedStringKey:Any]) {
         var typingAttributes = attributes
-        (nextNode, precedingNode) = (nil,nil)
+        (nextNode, precedingNode, currentNode) = (nil,nil,nil)
         
         for token in tokens {
             switch token {
             case let .node(name: name, title: _, contents: _):
-                allNodes[name] = token
+                //allNodes[name] = token
+                let node = Node.init(token, attributes: attributes)
+                allNodes[name] = node
+                nodeOrder.append(name)
             case .global(.next(let next)):
                 self.nextNode = next
             case .global(.prev(let prev)):
@@ -191,18 +204,22 @@ class ViewController: NSViewController {
     @IBAction func didPressButton(_ sender: NSButton) {
     }
     @IBAction func didPressPrevious(_ sender: NSButton) {
-        print(#function, precedingNode)
+        print(#function, precedingNode ?? "")
     }
     @IBAction func didPressNext(_ sender: NSButton) {
-        print(#function, nextNode)
+        print(#function, nextNode ?? "")
         guard let nextNode = nextNode,
-            let next = allNodes[nextNode],
-            case .node(name: _, title: _, contents: let contents) = next
+            let next = allNodes[nextNode]
+            //case .node(name: _, title: _, contents: let contents) = next
         else {
+            if let current = currentNode, let index = nodeOrder.index(of: current), index < nodeOrder.count - 1, let next = allNodes[nodeOrder[index + 1]] {
+                parse(next.contents, attributes: next.typingAttributes)
+                currentNode = next.name
+            }
             return
         }
-        parse(contents, attributes: [:])
-        
+        parse(next.contents, attributes: next.typingAttributes)
+        currentNode = next.name
     }
     @IBAction func didPressContents(_ sender: Any) {
     }
