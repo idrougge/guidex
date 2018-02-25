@@ -67,7 +67,7 @@ class ViewController: NSViewController {
     /// Name of current node
     var currentNode:String?
     
-    func parse(_ tokens:[AmigaGuide.Tokens], attributes:[NSAttributedStringKey:Any]) {
+    func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
         var typingAttributes = attributes
         (nextNode, precedingNode, currentNode) = (nil,nil,nil)
         textView.string = ""
@@ -206,6 +206,24 @@ class ViewController: NSViewController {
     }
     @IBAction func didPressPrevious(_ sender: NSButton) {
         print(#function, precedingNode ?? "")
+        switch (precedingNode, currentNode) {
+        case (let precedingNode?, _): break
+        case (_, let current?) where current == "a" && 1>2: break
+        case (_, let currentNode?): break
+        default: break
+        }
+        guard let prevNode = precedingNode,
+            let prev = allNodes[prevNode] else {
+                if let currentNode = currentNode,
+                    let currentIndex = nodeOrder.index(of: currentNode),
+                    1..<nodeOrder.count ~= currentIndex,
+                    let prev = allNodes[nodeOrder[currentIndex - 1]]{
+                    parse(prev.contents, attributes: prev.typingAttributes)
+                }
+                return
+        }
+        parse(prev.contents, attributes: prev.typingAttributes)
+        currentNode = prev.name
     }
     @IBAction func didPressNext(_ sender: NSButton) {
         print(#function, nextNode ?? "")
