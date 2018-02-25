@@ -70,6 +70,7 @@ class ViewController: NSViewController {
     func parse(_ tokens:[AmigaGuide.Tokens], attributes:[NSAttributedStringKey:Any]) {
         var typingAttributes = attributes
         (nextNode, precedingNode, currentNode) = (nil,nil,nil)
+        textView.string = ""
         
         for token in tokens {
             switch token {
