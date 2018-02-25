@@ -129,14 +129,17 @@ struct AmigaGuide {
                 case ("@{settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).flatMap(Int.init)
                 self = .settabs(sizes)
                 case ("@{\"", _?):
-                    guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(.+)\\s\\\"(.+)\\\"", options: []),
+                    guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(.+)\\s\\\"?(.+)\\\"?", options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
                         match.numberOfRanges == 4
                         else { return nil }
+                    print("match:", match)
                     let label = String(str[Range(match.range(at: 1), in: str)!])
+                    print("label:", label)
                     // FIXME: Handle System and REXX links by not handling them
                     let _ = String(str[Range(match.range(at: 2), in: str)!]) // Type of link
                     let node = String(str[Range(match.range(at: 3), in: str)!])
+                    print("node:", node)
                     self = .link(label: label, node: node, line: nil)
                 default:
                     print(tok.pre)
