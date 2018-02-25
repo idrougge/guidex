@@ -219,6 +219,7 @@ class ViewController: NSViewController {
                     1..<nodeOrder.count ~= currentIndex,
                     let prev = allNodes[nodeOrder[currentIndex - 1]]{
                     parse(prev.contents, attributes: prev.typingAttributes)
+                    self.currentNode = prev.name
                 }
                 return
         }
