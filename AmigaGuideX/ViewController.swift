@@ -61,11 +61,16 @@ class ViewController: NSViewController, NSTextViewDelegate {
         
         var typingAttributes = textView.typingAttributes
         typingAttributes.updateValue(fixedWidth, forKey: .font)
-        let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
+        #if DEBUG
+        //let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
         //let parser = Parser(file: "/Desktop/System3.9/Locale/Help/svenska/Sys/amigaguide.guide")
+        let parser = Parser(file: "/Downloads/E_v3.3a/Docs/BeginnersGuide/Appendices.guide")
         parse(parser.parseResult, attributes: typingAttributes)
+        #endif
         //if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
-        if let main = allNodes["MAIN"] {
+        guard !allNodes.isEmpty else { return print("Found no nodes") }
+        // FIXME: While the guard ensures safety, this is nevertheless ugly
+        if let main = allNodes["MAIN"] ?? allNodes[nodeOrder.first!] {
             parse(main.contents, attributes: typingAttributes)
             currentNode = main.name
         }
@@ -81,6 +86,8 @@ class ViewController: NSViewController, NSTextViewDelegate {
     var precedingNode:String?
     /// Name of current node
     var currentNode:String?
+    /// Name of table of contents node
+    var tocNode:String?
     
     func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
         var typingAttributes = attributes
@@ -247,7 +254,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
         print(#function, sender)
     }
     @IBAction func didPressNext(_ sender: NSButton) {
-        print(#function, nextNode ?? "")
+        print(#function, nextNode ?? "not found")
         guard let nextNode = nextNode,
             let next = allNodes[nextNode]
             //case .node(name: _, title: _, contents: let contents) = next
