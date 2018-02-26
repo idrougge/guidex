@@ -151,7 +151,8 @@ struct AmigaGuide {
                 case (_, _) where str.starts(with: "@{\""):
                     fallthrough
                 case ("@{\"", _?):
-                    guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(.+)\\s\\\"?([^\"]+)\\\"?", options: []),
+                    // FIXME: Links can point to other files: @{title link file/node}
+                    guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(\\S+)\\s\\\"?([^\"]+)\\\"?", options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
                         match.numberOfRanges == 4
                         else { return nil }
@@ -181,7 +182,6 @@ class Parser {
         parseFile(fileContents)
     }
     func parseFile(_ contents:String) {
-        print(#function)
         var start = contents.startIndex
         while start < contents.endIndex {
             let (t, pos):(AmigaGuide.Tokens?, String.Index) = getTokens(contents, from: start)
@@ -225,7 +225,7 @@ class Parser {
             let start = contents.index(after: mark)
             let text = contents[start ..< endofline]
             let from = contents.index(after: endofline)
-            if text.starts(with: "node"), let node = AmigaGuide.ToplevelTokens(str: String(text)), case let AmigaGuide.ToplevelTokens.node(name, title) = node {
+            if text.lowercased().starts(with: "node"), let node = AmigaGuide.ToplevelTokens(str: String(text)), case let AmigaGuide.ToplevelTokens.node(name, title) = node {
                 //print("Text starts with 'node' and is node \(node)")
                 var pos = from
                 //var (_,p) = getTokens(contents_copy, from: from)
