@@ -200,6 +200,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 paragraph.tabStops = self.paragraph.tabStops
                 typingAttributes[.paragraphStyle] = paragraph
             case .global(.remark): break
+            case .global(.title(let title)): self.view.window?.title = title
             default:
                 typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
                 textView.textStorage?.append(NSAttributedString(string: String(describing: token), attributes: typingAttributes))
