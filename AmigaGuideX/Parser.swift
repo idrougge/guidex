@@ -37,7 +37,8 @@ struct AmigaGuide {
         init?(str:String) {
             guard let str = str.splitFirstWord() else { return nil }
             switch str.pre.lowercased() {
-            case "node": // Node borde peka på ett abstrakt node-case
+            // FIXME: Node names can be enclosed by parentheses and containing whitespace
+            case "node":
                 guard let split = str.rest?.splitFirstWord() else { return nil }
                 self = .node(split.pre, split.rest)
             case "endnode": self = .endnode
@@ -57,6 +58,7 @@ struct AmigaGuide {
                 guard let node = str.rest else { return nil }
                 self = .prev(node)
             case "title":
+                // FIXME: Quote marks must be removed from title
                 guard let title = str.rest else { return nil }
                 self = .title(title)
             case "rem":
@@ -128,6 +130,8 @@ struct AmigaGuide {
                 case ("@{pari", let size?): self = .pari(Int(size) ?? 0)
                 case ("@{settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).flatMap(Int.init)
                 self = .settabs(sizes)
+                case (_, _) where str.starts(with: "@{\""):
+                    fallthrough
                 case ("@{\"", _?):
                     guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(.+)\\s\\\"?([^\"]+)\\\"?", options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
