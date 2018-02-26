@@ -39,8 +39,26 @@ struct AmigaGuide {
             switch str.pre.lowercased() {
             // FIXME: Node names can be enclosed by parentheses and containing whitespace
             case "node":
-                guard let split = str.rest?.splitFirstWord() else { return nil }
-                self = .node(split.pre, split.rest)
+                guard let rest = str.rest else { return nil }
+                print("rest:", rest)
+                let r=rest.range(of: "^\"?([^\"]+)\"?(?:\\s\"?([^\"]+)\"?)?\\s*$", options: .regularExpression)
+                print("range:",rest[r!])
+ 
+                let regex = try! NSRegularExpression(pattern: "^\"?([^\"]+)\"?(?:\\s\"?([^\"]+)\"?)?\\s*$", options: [])
+                guard let match = regex.firstMatch(in: rest, options: .anchored, range: NSRange(rest.startIndex..., in: rest)) else { fatalError() }
+                assert(match.numberOfRanges == 3)
+                for i in 0..<match.numberOfRanges {
+                    guard let range = Range(match.range(at: i), in: rest) else { continue }
+                    print("\(i):", String(rest[Range(match.range(at: i), in: rest)!]))
+                }
+                let name = String(rest[Range(match.range(at: 1), in: rest)!])
+                var title:String?
+                if let range = Range(match.range(at: 2), in: rest) {
+                    title = String(rest[range])
+                }
+                self = .node(name, title)
+                //guard let split = str.rest?.splitFirstWord() else { return nil }
+                //self = .node(split.pre, split.rest)
             case "endnode": self = .endnode
             case "wordwrap": self = .wordwrap
             case "smartwrap": self = .smartwrap
