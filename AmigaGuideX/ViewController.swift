@@ -8,13 +8,45 @@
 
 import Cocoa
 
-class ViewController: NSViewController {
+typealias TypingAttributes = [NSAttributedStringKey:Any]
+class Node {
+    let name:String
+    let title:String?
+    let contents:[AmigaGuide.Tokens]
+    let typingAttributes:TypingAttributes
+    init?(_ node:AmigaGuide.Tokens?, attributes:TypingAttributes) {
+        guard let node = node, case let .node(name: name, title: title, contents: contents) = node else {
+            return nil
+        }
+        self.name = name
+        self.title = title
+        self.contents = contents
+        self.typingAttributes = attributes
+    }
+}
+
+class ViewController: NSViewController, NSTextViewDelegate {
 
     @IBOutlet var textView: NSTextView!
     let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+    let manager = NSFontManager.shared
     
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        print(#function, menuItem)
+        return true
+    }
+    func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool {
+        print(#function, link, charIndex)
+        guard let link = link as? String, let node = allNodes[link] else { return false }
+        parse(node.contents, attributes: node.typingAttributes)
+        currentNode = node.name
+        self.view.window?.title = node.title ?? NSLocalizedString("Unnamed node", comment: "")
+        return true // Stop next responder from handling link
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        textView.delegate = self
+        //becomeFirstResponder()
         /*
         if #available(OSX 10.11, *) {
             textView.font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
@@ -24,43 +56,55 @@ class ViewController: NSViewController {
  */
         //let fixedWidth = NSFont(name: "TopazPlus a600a1200a4000", size: 14)
         let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
-        let manager = NSFontManager.shared
+        
         textView.enclosingScrollView?.hasHorizontalScroller = true
-        /*
-        textView.maxSize = NSMakeSize(CGFloat.greatestFiniteMagnitude, CGFloat.greatestFiniteMagnitude)
-        textView.textContainer?.containerSize = NSMakeSize(CGFloat.greatestFiniteMagnitude, CGFloat.greatestFiniteMagnitude)
-        textView.isHorizontallyResizable = true
-        textView.textContainer?.widthTracksTextView = true
-        paragraph.lineBreakMode = .byWordWrapping
-         */
-        /*
-        let storage = textView.textStorage!
-        var atts = [NSAttributedStringKey:Any]()
-        atts[.font] = fixedWidth
-        atts[.paragraphStyle] = paragraph
-        let str = NSAttributedString(string: "Hej", attributes: atts)
-        storage.append(str)
-        storage.append(NSAttributedString(string: "\r\n"))
-        paragraph.alignment = .right
-        let p2 = paragraph.mutableCopy() as! NSMutableParagraphStyle
-        p2.alignment = .center
-        atts[.paragraphStyle] = p2
-        atts[.font] = nil
-        storage.append(NSAttributedString(string: "Svejs", attributes: atts))
-        storage.append(NSAttributedString(string: "\r\n"))
-        return
-         */
-        //textView.font = fixedWidth
-        //let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-        //paragraph.headIndent = 100.0
-        //paragraph.firstLineHeadIndent = 100.0
-        //textView.defaultParagraphStyle = paragraph
+        
         var typingAttributes = textView.typingAttributes
         typingAttributes.updateValue(fixedWidth, forKey: .font)
-        let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
+        #if DEBUG
+        //let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
+        //let parser = Parser(file: "/Desktop/System3.9/Locale/Help/svenska/Sys/amigaguide.guide")
+        let parser = Parser(file: "/Downloads/E_v3.3a/Docs/BeginnersGuide/Appendices.guide")
+        parse(parser.parseResult, attributes: typingAttributes)
+        #endif
+        //if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
+        guard !allNodes.isEmpty else { return print("Found no nodes") }
+        // FIXME: While the guard ensures safety, this is nevertheless ugly
+        if let main = allNodes["MAIN"] ?? allNodes[nodeOrder.first!] {
+            parse(main.contents, attributes: typingAttributes)
+            currentNode = main.name
+        }
+    }
+    
+    //var allNodes:[String:AmigaGuide.Tokens] = [:]
+    var allNodes:[String:Node] = [:]
+    /// Names of all nodes in order of appearance, for fetching
+    var nodeOrder:[String] = []
+    /// Name of @NEXT node
+    var nextNode:String?
+    /// Name of @PREV node
+    var precedingNode:String?
+    /// Name of current node
+    var currentNode:String?
+    /// Name of table of contents node
+    var tocNode:String?
+    
+    func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
+        var typingAttributes = attributes
+        (nextNode, precedingNode, currentNode) = (nil,nil,nil)
+        textView.string = ""
         
-        for token in parser.parseResult {
+        for token in tokens {
             switch token {
+            case let .node(name: name, title: _, contents: _):
+                //allNodes[name] = token
+                let node = Node.init(token, attributes: attributes)
+                allNodes[name] = node
+                nodeOrder.append(name)
+            case .global(.next(let next)):
+                self.nextNode = next
+            case .global(.prev(let prev)):
+                self.precedingNode = prev
             case .newline, .normal(.linebreak):
                 textView.textStorage?.insert(NSAttributedString(string:"\r\n"), at: textView.textStorage!.length)
             case .plaintext(let text):
@@ -99,7 +143,7 @@ class ViewController: NSViewController {
             case .normal(.link(let label, let node, _)):
                 // FIXME: System and REXX links must be discarded in a sensible way
                 // TODO: Register URL scheme
-                typingAttributes[.link] = "url"
+                typingAttributes[.link] = node
                 let text = NSAttributedString(string: "\(label) -> \(node)", attributes: typingAttributes)
                 textView.textStorage?.append(text)
                 //textView.insertText(text)
@@ -163,6 +207,8 @@ class ViewController: NSViewController {
                 let paragraph = p.mutableCopy() as! NSMutableParagraphStyle
                 paragraph.tabStops = self.paragraph.tabStops
                 typingAttributes[.paragraphStyle] = paragraph
+            case .global(.remark): break
+            case .global(.title(let title)): self.view.window?.title = title
             default:
                 typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
                 textView.textStorage?.append(NSAttributedString(string: String(describing: token), attributes: typingAttributes))
@@ -184,8 +230,44 @@ class ViewController: NSViewController {
     @IBAction func didPressButton(_ sender: NSButton) {
     }
     @IBAction func didPressPrevious(_ sender: NSButton) {
+        print(#function, precedingNode ?? "")
+        switch (precedingNode, currentNode) {
+        case (let precedingNode?, _): break
+        case (_, let current?) where current == "a" && 1>2: break
+        case (_, let currentNode?): break
+        default: break
+        }
+        guard let prevNode = precedingNode,
+            let prev = allNodes[prevNode] else {
+                if let currentNode = currentNode,
+                    let currentIndex = nodeOrder.index(of: currentNode),
+                    1..<nodeOrder.count ~= currentIndex,
+                    let prev = allNodes[nodeOrder[currentIndex - 1]]{
+                    parse(prev.contents, attributes: prev.typingAttributes)
+                    self.currentNode = prev.name
+                }
+                return
+        }
+        parse(prev.contents, attributes: prev.typingAttributes)
+        currentNode = prev.name
+    }
+    @IBAction func didSelectOpen(_ sender:NSMenuItem) {
+        print(#function, sender)
     }
     @IBAction func didPressNext(_ sender: NSButton) {
+        print(#function, nextNode ?? "not found")
+        guard let nextNode = nextNode,
+            let next = allNodes[nextNode]
+            //case .node(name: _, title: _, contents: let contents) = next
+        else {
+            if let current = currentNode, let index = nodeOrder.index(of: current), index < nodeOrder.count - 1, let next = allNodes[nodeOrder[index + 1]] {
+                parse(next.contents, attributes: next.typingAttributes)
+                currentNode = next.name
+            }
+            return
+        }
+        parse(next.contents, attributes: next.typingAttributes)
+        currentNode = next.name
     }
     @IBAction func didPressContents(_ sender: Any) {
     }
