@@ -20,7 +20,24 @@ class AmigaGuideXTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+    func testNodeTokeniser() {
+        
+        guard case AmigaGuide.ToplevelTokens.node(let name, let title) = AmigaGuide.ToplevelTokens.init(str: "@{\"Hej\" link MAIN")! else {
+            return XCTFail()
+        }
+ 
+        XCTAssert(name == "MAIN")
+        XCTAssert(title == "Hej")
+    }
+    func testLinkTokeniser() {
+        guard case AmigaGuide.TextTokens.link(let title, node: let node, line: _) = AmigaGuide.TextTokens.init("""
+@{" Assignment and Copying " Link "Assignment and Copying"
+""")! else {
+    return XCTFail()
+        }
+        XCTAssert(node == "Assignment and Copying")
+        XCTAssert(title == " Assignment and Copying ")
+    }
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
