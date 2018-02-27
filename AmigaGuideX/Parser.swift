@@ -148,11 +148,12 @@ struct AmigaGuide {
                 case ("@{pari", let size?): self = .pari(Int(size) ?? 0)
                 case ("@{settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).flatMap(Int.init)
                 self = .settabs(sizes)
-                case (_, _) where str.starts(with: "@{\""):
+                case ("@{", _?): // Sometimes links have a space after opening brace
                     fallthrough
-                case ("@{\"", _?):
+                case ("@{\"", _?),
+                     (_, _) where str.starts(with: "@{\""):
                     // FIXME: Links can point to other files: @{title link file/node}
-                    guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(\\S+)\\s\\\"?([^\"]+)\\\"?", options: []),
+                    guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(\\S+)\\s\\\"?([^\"]+)\\\"?\\s+", options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
                         match.numberOfRanges == 4
                         else { return nil }
