@@ -30,36 +30,55 @@ class AmigaGuideXTests: XCTestCase {
         XCTAssert(title == "Hej")
     }
     func testLinkTokeniser() {
-        guard case AmigaGuide.TextTokens.link(let title, node: let node, line: _) = AmigaGuide.TextTokens.init("""
-@{" Assignment and Copying " Link "Assignment and Copying"
-""")! else {
-    return XCTFail()
+        
+        let linkExamples:[String] = """
+        @{ " Amiga E " link amiga-e 
+        @{ " Aztec C " link manx-c
+        @{ " DICE C " link dice-c
+        @{ " GNU C/C++ " link gnu-cpp
+        @{ " SAS C 6.3 " link sas-c
+        @{ " Maxon C++ V1.2.1 " link maxon-cpp
+        @{ " Assemblers " link assemblers
+        @{ " Other systems... " link other
+        @{" Assignment and Copying " Link "Assignment and Copying"
+        @{" Pointers and Memory Allocation " Link "Pointers and Memory Allocation"
+        @{" String and List Misuse " Link "String and List Misuse"
+        @{" Initialising Data " Link "Initialising Data"
+        @{" Freeing Resources " Link "Freeing Resources"
+        @{" Pointers and Dereferencing " Link "Pointers and Dereferencing"
+        @{" Mathematics Functions " Link "Mathematics Functions"
+        @{" Signed and Unsigned Values " Link "Signed and Unsigned Values" 
+        """.components(separatedBy: .newlines)
+        let labels:[(String,String)] = [
+        (" Amiga E ", "amiga-e"),
+        (" Aztec C ", "manx-c"),
+        (" DICE C ", "dice-c"),
+        (" GNU C/C++ ", "gnu-cpp"),
+        (" SAS C 6.3 ", "sas-c"),
+        (" Maxon C++ V1.2.1 ", "maxon-cpp"),
+        (" Assemblers ", "assemblers"),
+        (" Other systems... ", "other"),
+        (" Assignment and Copying ", "Assignment and Copying"),
+        (" Pointers and Memory Allocation ", "Pointers and Memory Allocation"),
+        (" String and List Misuse ", "String and List Misuse"),
+        (" Initialising Data ", "Initialising Data"),
+        (" Freeing Resources ", "Freeing Resources"),
+        (" Pointers and Dereferencing ", "Pointers and Dereferencing"),
+        (" Mathematics Functions ", "Mathematics Functions"),
+        (" Signed and Unsigned Values ", "Signed and Unsigned Values"),
+        ]
+        for (nr,(line,(label,nodename))) in zip(linkExamples,labels).enumerated() {
+            print(nr, line)
+            guard let token = AmigaGuide.TextTokens.init(line) else { return XCTFail(line) }
+            guard case let AmigaGuide.TextTokens.link(title, node: node, line: _) = token else {return XCTFail() }
+            XCTAssert(node == nodename, "'\(node)' <> '\(nodename)'")
+            XCTAssert(title == label)
         }
-        XCTAssert(node == "Assignment and Copying")
-        XCTAssert(title == " Assignment and Copying ")
     }
+
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        /*
- @{ " Amiga E " link amiga-e }
- @{ " Aztec C " link manx-c }
- @{ " DICE C " link dice-c }
- @{ " GNU C/C++ " link gnu-cpp}
- @{ " SAS C 6.3 " link sas-c }
- @{ " Maxon C++ V1.2.1 " link maxon-cpp }
- @{ " Assemblers " link assemblers }
- @{ " Other systems... " link other }
- (nod l-systeme i AProf.guide)
-         @{" Assignment and Copying " Link "Assignment and Copying" }
-         @{" Pointers and Memory Allocation " Link "Pointers and Memory Allocation" }
-         @{" String and List Misuse " Link "String and List Misuse" }
-         @{" Initialising Data " Link "Initialising Data" }
-         @{" Freeing Resources " Link "Freeing Resources" }
-         @{" Pointers and Dereferencing " Link "Pointers and Dereferencing" }
-         @{" Mathematics Functions " Link "Mathematics Functions" }
-         @{" Signed and Unsigned Values " Link "Signed and Unsigned Values" }
- */
     }
     
     func testPerformanceExample() {

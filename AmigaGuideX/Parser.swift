@@ -153,7 +153,8 @@ struct AmigaGuide {
                 case ("@{\"", _?),
                      (_, _) where str.starts(with: "@{\""):
                     // FIXME: Links can point to other files: @{title link file/node}
-                    guard let regex = try? NSRegularExpression(pattern: "^@\\{\"(.+)\"\\s(\\S+)\\s\\\"?([^\"]+)\\\"?\\s+", options: []),
+                    let pattern = "^@\\{\\s*\\\"?((?<=\\\")(?:.*)(?=\\\")|(?<!\\\")(?:\\S+)(?!\\\"))\\\"?\\s+(\\w+)\\s+\\\"?((?<=\\\")(?:.*)(?=\\\")|(?<!\\\")(?:\\S+)(?!\\\"))\\\"?\\s*$"
+                    guard let regex = try? NSRegularExpression(pattern: pattern, options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
                         match.numberOfRanges == 4
                         else { return nil }
