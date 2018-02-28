@@ -147,7 +147,8 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 // TODO: Register URL scheme
                 typingAttributes[.link] = node
                 let text = NSAttributedString(string: "\(label) -> \(node)", attributes: typingAttributes)
-                textView.insertText(text)
+                textView.textStorage?.append(text)
+                //textView.insertText(text)
                 typingAttributes.removeValue(forKey: .link)
             case .escaped(let escaped):
                 textView.textStorage?.append(NSAttributedString(string: escaped, attributes: typingAttributes))
