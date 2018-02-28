@@ -36,7 +36,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
         return true
     }
     func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool {
-        print(#function, link, charIndex)
+        print(#function, "\"\(link)\"", charIndex)
         guard let link = link as? String, let node = allNodes[link] else { return false }
         parse(node.contents, attributes: node.typingAttributes)
         currentNode = node.name
@@ -65,6 +65,8 @@ class ViewController: NSViewController, NSTextViewDelegate {
         //let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
         //let parser = Parser(file: "/Desktop/System3.9/Locale/Help/svenska/Sys/amigaguide.guide")
         let parser = Parser(file: "/Downloads/E_v3.3a/Docs/BeginnersGuide/Appendices.guide")
+        //let parser = Parser(file: "/Downloads/E_v3.3a/Bin/Tools/AProf/AProf.guide")
+        //let parser = Parser(file: "/Dropbox/bb2guide13/Blitz2_V1.3.guide")
         parse(parser.parseResult, attributes: typingAttributes)
         #endif
         //if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
