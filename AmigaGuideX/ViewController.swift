@@ -64,8 +64,8 @@ class ViewController: NSViewController, NSTextViewDelegate {
         #if DEBUG
         //let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
         //let parser = Parser(file: "/Desktop/System3.9/Locale/Help/svenska/Sys/amigaguide.guide")
-        let parser = Parser(file: "/Downloads/E_v3.3a/Docs/BeginnersGuide/Appendices.guide")
-        //let parser = Parser(file: "/Downloads/E_v3.3a/Bin/Tools/AProf/AProf.guide")
+        //let parser = Parser(file: "/Downloads/E_v3.3a/Docs/BeginnersGuide/Appendices.guide")
+        let parser = Parser(file: "/Downloads/E_v3.3a/Bin/Tools/AProf/AProf.guide")
         //let parser = Parser(file: "/Dropbox/bb2guide13/Blitz2_V1.3.guide")
         parse(parser.parseResult, attributes: typingAttributes)
         #endif
@@ -146,7 +146,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 // FIXME: System and REXX links must be discarded in a sensible way
                 // TODO: Register URL scheme
                 typingAttributes[.link] = node
-                let text = NSAttributedString(string: "\(label) -> \(node)", attributes: typingAttributes)
+                let text = NSAttributedString(string: label, attributes: typingAttributes)
                 textView.textStorage?.append(text)
                 //textView.insertText(text)
                 typingAttributes.removeValue(forKey: .link)
