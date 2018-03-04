@@ -238,7 +238,7 @@ class Parser {
                     if let t = t {
                         arr.append(t)
                         // TODO: Scan for @TITLE tag and insert into node
-                        if case AmigaGuide.Tokens.global(let token) = t, case .endnode = token {
+                        if case AmigaGuide.Tokens.global(.endnode) = t {
                             // End of node found, return node token with contents
                             let n = AmigaGuide.Tokens.node(name: name, title: title, contents: arr)
                             return (n,p)
