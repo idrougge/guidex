@@ -8,8 +8,8 @@
 
 import Cocoa
 
-typealias TypingAttributes = [NSAttributedStringKey:Any]
-class Node {
+fileprivate typealias TypingAttributes = [NSAttributedStringKey:Any]
+fileprivate class Node {
     let name:String
     let title:String?
     let contents:[AmigaGuide.Tokens]
@@ -28,8 +28,8 @@ class Node {
 class ViewController: NSViewController, NSTextViewDelegate {
 
     @IBOutlet var textView: NSTextView!
-    let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-    let manager = NSFontManager.shared
+    private let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+    private let manager = NSFontManager.shared
     
     override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         print(#function, menuItem)
@@ -79,7 +79,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
     }
     
     //var allNodes:[String:AmigaGuide.Tokens] = [:]
-    var allNodes:[String:Node] = [:]
+    fileprivate var allNodes:[String:Node] = [:]
     /// Names of all nodes in order of appearance, for fetching
     var nodeOrder:[String] = []
     /// Name of @NEXT node
@@ -91,7 +91,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
     /// Name of table of contents node
     var tocNode:String?
     
-    func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
+    fileprivate func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
         var typingAttributes = attributes
         (nextNode, precedingNode, currentNode) = (nil,nil,nil)
         textView.string = ""
@@ -270,6 +270,8 @@ class ViewController: NSViewController, NSTextViewDelegate {
         }
         parse(next.contents, attributes: next.typingAttributes)
         currentNode = next.name
+    }
+    @IBAction func didPressRetrace(_ sender: Any) {
     }
     @IBAction func didPressContents(_ sender: Any) {
     }
