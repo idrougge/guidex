@@ -684,19 +684,19 @@
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
+                <windowController id="B8D-0N-5wS" customClass="WindowController" customModule="AmigaGuideX" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <toolbar key="toolbar" implicitIdentifier="8CEEEAFB-B2C4-4FAE-9BB7-23635211044E" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="qbc-M7-CIK">
+                        <toolbar key="toolbar" implicitIdentifier="8CEEEAFB-B2C4-4FAE-9BB7-23635211044E" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="qbc-M7-CIK" customClass="Toolbar" customModule="AmigaGuideX" customModuleProvider="target">
                             <allowedToolbarItems>
                                 <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="DF6-Am-5Xr"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="gtA-V5-NYN"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="59R-Tp-0Ee"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="0dQ-yz-GSS"/>
-                                <toolbarItem implicitItemIdentifier="B36B3A3A-E1E6-4DA6-9A2F-3044444EDBD4" label="Back" paletteLabel="Back" image="NSGoBackTemplate" id="Yoa-1p-lPh">
+                                <toolbarItem implicitItemIdentifier="B36B3A3A-E1E6-4DA6-9A2F-3044444EDBD4" explicitItemIdentifier="back" label="Back" paletteLabel="Back" image="NSGoBackTemplate" id="Yoa-1p-lPh">
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="13" height="17"/>
                                     <size key="maxSize" width="127" height="28"/>
@@ -709,7 +709,7 @@
                                         </buttonCell>
                                     </button>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="AB59041F-840D-4B98-92CD-C710924F4BCF" label="Right" paletteLabel="Right" image="NSGoForwardTemplate" id="Snp-t6-jnp">
+                                <toolbarItem implicitItemIdentifier="AB59041F-840D-4B98-92CD-C710924F4BCF" explicitItemIdentifier="right" label="Right" paletteLabel="Right" image="NSGoForwardTemplate" id="Snp-t6-jnp">
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="40" height="25"/>
                                     <size key="maxSize" width="127" height="25"/>
@@ -722,7 +722,7 @@
                                         </buttonCell>
                                     </button>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="1C20499D-4303-4DB4-8A85-851C609E4F0C" label="Left" paletteLabel="Left" image="NSGoLeftTemplate" id="5DX-2l-gOy">
+                                <toolbarItem implicitItemIdentifier="1C20499D-4303-4DB4-8A85-851C609E4F0C" explicitItemIdentifier="left" label="Left" paletteLabel="Left" image="NSGoLeftTemplate" id="5DX-2l-gOy">
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="41" height="25"/>
                                     <size key="maxSize" width="127" height="25"/>
@@ -734,6 +734,9 @@
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
+                                    <connections>
+                                        <action selector="didPressPrevious:" target="B8D-0N-5wS" id="nXR-si-CXL"/>
+                                    </connections>
                                 </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>

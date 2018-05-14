@@ -25,6 +25,11 @@ fileprivate class Node {
     }
 }
 
+protocol NavigationController {
+    var canGoBack: Bool {get}
+    var canGoForward: Bool {get}
+}
+
 class ViewController: NSViewController, NSTextViewDelegate {
 
     @IBOutlet var textView: NSTextView!
@@ -40,6 +45,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
         guard let link = link as? String, let node = allNodes[link] else { return false }
         parse(node.contents, attributes: node.typingAttributes)
         currentNode = node.name
+        navigationHistory.append(node)
         self.view.window?.title = node.title ?? NSLocalizedString("Unnamed node", comment: "")
         return true // Stop next responder from handling link
     }
@@ -86,10 +92,13 @@ class ViewController: NSViewController, NSTextViewDelegate {
     var nextNode:String?
     /// Name of @PREV node
     var precedingNode:String?
+    // TODO: Can be surmised from top of navigationHistory
     /// Name of current node
     var currentNode:String?
     /// Name of table of contents node
     var tocNode:String?
+    /// Current navigation history
+    fileprivate var navigationHistory:[Node] = []
     
     fileprivate func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
         var typingAttributes = attributes
@@ -272,8 +281,29 @@ class ViewController: NSViewController, NSTextViewDelegate {
         currentNode = next.name
     }
     @IBAction func didPressRetrace(_ sender: Any) {
+        print(#function)
+        if !navigationHistory.isEmpty {
+            navigationHistory.removeLast()
+        }
+        //self.view.window.validate
+        self.view.window?.toolbar?.items.forEach{ item in
+            //self.view.window?.validateToolbarItem(item)
+            self.view.window?.windowController?.validateToolbarItem(item)
+            
+        }
     }
     @IBAction func didPressContents(_ sender: Any) {
     }
+}
+
+extension ViewController: NavigationController {
+    var canGoBack: Bool {
+        return !navigationHistory.isEmpty
+    }
+    
+    var canGoForward: Bool {
+        return false
+    }
+    
     
 }
