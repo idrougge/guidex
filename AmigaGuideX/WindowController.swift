@@ -27,13 +27,31 @@ class WindowController: NSWindowController {
             navigationController?.goBack()
         }
     }
+    
+    @IBAction func didPressRetrace(_ sender: Any) {
+        print(#function)
+        navigationController?.retrace()
+    }
+    
+    @IBAction func didPressContents(_ sender: Any) {
+        print(#function)
+    }
+    
+    @IBAction func didPressIndex(_ sender: Any) {
+        print(#function)
+    }
     override func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         //print(#function, item, item.itemIdentifier)
-        if item.itemIdentifier.rawValue == "left" {
-            //item.isEnabled = false
-            //return false
-            item.isEnabled = navigationController?.canGoBack ?? false
+        let paths = ["left": \NavigationController.canGoBack,
+                     "right": \NavigationController.canGoForward,
+                     "retrace": \NavigationController.canRetrace]
+        guard
+            let navigationController = navigationController,
+            let path = paths[item.itemIdentifier.rawValue]
+            else {
+                return item.isEnabled
         }
+        item.isEnabled = navigationController[keyPath: path]
         return item.isEnabled
     }
 }

@@ -696,19 +696,6 @@
                                 <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="gtA-V5-NYN"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="59R-Tp-0Ee"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="0dQ-yz-GSS"/>
-                                <toolbarItem implicitItemIdentifier="B36B3A3A-E1E6-4DA6-9A2F-3044444EDBD4" explicitItemIdentifier="back" label="Back" paletteLabel="Back" image="NSGoBackTemplate" id="Yoa-1p-lPh">
-                                    <nil key="toolTip"/>
-                                    <size key="minSize" width="13" height="17"/>
-                                    <size key="maxSize" width="127" height="28"/>
-                                    <button key="view" verticalHuggingPriority="750" id="efl-Vs-C3i">
-                                        <rect key="frame" x="0.0" y="14" width="40" height="20"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <buttonCell key="cell" type="recessed" title="Contents" bezelStyle="recessed" image="NSGoBackTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="X6U-gG-D96">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
-                                            <font key="font" metaFont="systemBold" size="12"/>
-                                        </buttonCell>
-                                    </button>
-                                </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="AB59041F-840D-4B98-92CD-C710924F4BCF" explicitItemIdentifier="right" label="Right" paletteLabel="Right" image="NSGoForwardTemplate" id="Snp-t6-jnp">
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="40" height="25"/>
@@ -738,10 +725,59 @@
                                         <action selector="didPressPrevious:" target="B8D-0N-5wS" id="nXR-si-CXL"/>
                                     </connections>
                                 </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="018FA36F-B10D-4E50-8AC1-96918523153D" explicitItemIdentifier="contents" label="Contents" paletteLabel="Contents" image="NSHomeTemplate" id="ZNf-zK-4cm">
+                                    <nil key="toolTip"/>
+                                    <size key="minSize" width="52" height="25"/>
+                                    <size key="maxSize" width="127" height="25"/>
+                                    <button key="view" verticalHuggingPriority="750" id="awv-JV-iI0">
+                                        <rect key="frame" x="2" y="14" width="52" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSHomeTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4vT-3A-dDp">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
+                                    <connections>
+                                        <action selector="didPressContents:" target="B8D-0N-5wS" id="y5D-id-GAk"/>
+                                    </connections>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="0481E5AB-2C6A-4009-8A7C-3C188621ED96" explicitItemIdentifier="retrace" label="Retrace" paletteLabel="Retrace" id="T8q-vQ-neU">
+                                    <nil key="toolTip"/>
+                                    <size key="minSize" width="57" height="25"/>
+                                    <size key="maxSize" width="140" height="25"/>
+                                    <button key="view" verticalHuggingPriority="750" id="eaE-um-LHK">
+                                        <rect key="frame" x="0.0" y="14" width="67" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="roundTextured" title="Retrace" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5SX-Z4-kpB">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
+                                    <connections>
+                                        <action selector="didPressRetrace:" target="B8D-0N-5wS" id="TdK-yC-Dhr"/>
+                                    </connections>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="85F22B86-8064-4549-B6D9-9F4927F62F3C" explicitItemIdentifier="index" label="Index" paletteLabel="Index" image="NSListViewTemplate" id="az9-h6-ebR">
+                                    <nil key="toolTip"/>
+                                    <size key="minSize" width="52" height="25"/>
+                                    <size key="maxSize" width="127" height="25"/>
+                                    <button key="view" verticalHuggingPriority="750" id="BQf-11-odD">
+                                        <rect key="frame" x="0.0" y="14" width="52" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSListViewTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="c9f-WX-o7N">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
+                                    <connections>
+                                        <action selector="didPressIndex:" target="B8D-0N-5wS" id="8Tm-SH-i1N"/>
+                                    </connections>
+                                </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
-                                <toolbarItem reference="gtA-V5-NYN"/>
-                                <toolbarItem reference="Yoa-1p-lPh"/>
+                                <toolbarItem reference="ZNf-zK-4cm"/>
+                                <toolbarItem reference="az9-h6-ebR"/>
+                                <toolbarItem reference="T8q-vQ-neU"/>
                                 <toolbarItem reference="0dQ-yz-GSS"/>
                                 <toolbarItem reference="5DX-2l-gOy"/>
                                 <toolbarItem reference="Snp-t6-jnp"/>
@@ -768,16 +804,16 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="boU-dm-sbp">
-                                <rect key="frame" x="0.0" y="33" width="480" height="393"/>
+                                <rect key="frame" x="0.0" y="0.0" width="480" height="426"/>
                                 <clipView key="contentView" id="YW0-zX-YbL">
-                                    <rect key="frame" x="1" y="1" width="478" height="391"/>
+                                    <rect key="frame" x="1" y="1" width="478" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="r18-XU-7di">
-                                            <rect key="frame" x="0.0" y="0.0" width="478" height="391"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="478" height="424"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="478" height="391"/>
+                                            <size key="minSize" width="478" height="424"/>
                                             <size key="maxSize" width="487" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         </textView>
@@ -789,77 +825,16 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="7gW-6h-EWk">
-                                    <rect key="frame" x="463" y="1" width="16" height="391"/>
+                                    <rect key="frame" x="463" y="1" width="16" height="424"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <button horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="KAp-G2-OoT">
-                                <rect key="frame" x="14" y="-2" width="96" height="32"/>
-                                <buttonCell key="cell" type="push" title="Contents" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ATU-vJ-RcE">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="didPressContents:" target="XfG-lQ-9wD" id="DOv-KK-FxW"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vDu-44-nx8">
-                                <rect key="frame" x="110" y="-2" width="73" height="32"/>
-                                <buttonCell key="cell" type="push" title="Index" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aup-Ni-Zay">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="didPressButton:" target="XfG-lQ-9wD" id="D97-7l-EAH"/>
-                                </connections>
-                            </button>
-                            <button horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CWc-2c-a8w">
-                                <rect key="frame" x="304" y="-2" width="93" height="32"/>
-                                <buttonCell key="cell" type="push" title="Previous" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2JP-lW-tXm">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="didPressPrevious:" target="XfG-lQ-9wD" id="AeI-sD-ege"/>
-                                </connections>
-                            </button>
-                            <button horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4Kj-ed-XBJ">
-                                <rect key="frame" x="397" y="-2" width="69" height="32"/>
-                                <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Rsz-Cn-fgp">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="didPressNext:" target="XfG-lQ-9wD" id="Ura-aI-n3u"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Aa4-C9-Zvg">
-                                <rect key="frame" x="205" y="3" width="61" height="25"/>
-                                <buttonCell key="cell" type="roundTextured" title="Retrace" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bf1-XO-MPc">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="didPressRetrace:" target="XfG-lQ-9wD" id="tua-Bv-i5g"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="KAp-G2-OoT" firstAttribute="baseline" secondItem="vDu-44-nx8" secondAttribute="baseline" id="4Sm-ag-ySe"/>
                             <constraint firstItem="boU-dm-sbp" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="A5l-JX-i4M"/>
-                            <constraint firstItem="4Kj-ed-XBJ" firstAttribute="leading" secondItem="CWc-2c-a8w" secondAttribute="trailing" constant="12" symbolic="YES" id="AQo-Li-8S3"/>
-                            <constraint firstItem="Aa4-C9-Zvg" firstAttribute="leading" secondItem="vDu-44-nx8" secondAttribute="trailing" constant="28" id="DKe-Mv-CRp"/>
-                            <constraint firstItem="CWc-2c-a8w" firstAttribute="leading" secondItem="Aa4-C9-Zvg" secondAttribute="trailing" constant="44" id="DV2-d0-MNS"/>
                             <constraint firstItem="boU-dm-sbp" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="FK7-eG-JQR"/>
-                            <constraint firstAttribute="bottom" secondItem="KAp-G2-OoT" secondAttribute="bottom" constant="5" id="NH1-yT-QEG"/>
-                            <constraint firstItem="CWc-2c-a8w" firstAttribute="baseline" secondItem="vDu-44-nx8" secondAttribute="baseline" id="Pso-V3-5Wm"/>
-                            <constraint firstAttribute="trailing" secondItem="4Kj-ed-XBJ" secondAttribute="trailing" constant="20" id="Qrl-JK-blE"/>
-                            <constraint firstItem="CWc-2c-a8w" firstAttribute="baseline" secondItem="4Kj-ed-XBJ" secondAttribute="baseline" id="dXr-3Y-sTz"/>
-                            <constraint firstItem="KAp-G2-OoT" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" symbolic="YES" id="f0Z-e1-E2x"/>
-                            <constraint firstItem="KAp-G2-OoT" firstAttribute="top" secondItem="boU-dm-sbp" secondAttribute="bottom" constant="7" id="fZz-8d-Xt4"/>
-                            <constraint firstItem="vDu-44-nx8" firstAttribute="leading" secondItem="KAp-G2-OoT" secondAttribute="trailing" constant="12" symbolic="YES" id="kYr-h2-drv"/>
+                            <constraint firstAttribute="bottom" secondItem="boU-dm-sbp" secondAttribute="bottom" id="fmW-HZ-5oa"/>
                             <constraint firstItem="boU-dm-sbp" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="pAT-GU-4sj"/>
-                            <constraint firstItem="Aa4-C9-Zvg" firstAttribute="baseline" secondItem="vDu-44-nx8" secondAttribute="baseline" id="qnI-bA-Brt"/>
                         </constraints>
                     </view>
                     <connections>
@@ -872,8 +847,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="NSGoBackTemplate" width="9" height="12"/>
         <image name="NSGoForwardTemplate" width="9" height="12"/>
         <image name="NSGoLeftTemplate" width="9" height="12"/>
+        <image name="NSHomeTemplate" width="14" height="14"/>
+        <image name="NSListViewTemplate" width="14" height="10"/>
     </resources>
 </document>

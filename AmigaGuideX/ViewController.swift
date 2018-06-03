@@ -28,7 +28,9 @@ fileprivate class Node {
 protocol NavigationController {
     var canGoBack: Bool {get}
     var canGoForward: Bool {get}
+    var canRetrace: Bool {get}
     func goBack()
+    func goForward()
     func retrace()
 }
 
@@ -240,11 +242,38 @@ class ViewController: NSViewController, NSTextViewDelegate {
         }
     }
 
-    @IBAction func didPressButton(_ sender: NSButton) {
+    @IBAction func didSelectOpen(_ sender:NSMenuItem) {
+        print(#function, sender)
     }
-    @IBAction func didPressPrevious(_ sender: NSButton) {
-        goBack()
+}
+// MARK: - Navigation
+extension ViewController: NavigationController {
+    var canGoBack: Bool {
+        // TODO: This should only be calculated when navigating between nodes
+        if let prev = precedingNode, let _ = allNodes[prev] {
+            return true
+        }
+        if let currentNode = currentNode,
+            let currentIndex = nodeOrder.index(of: currentNode),
+            1 ..< nodeOrder.count ~= currentIndex,
+            let _ = allNodes[nodeOrder[currentIndex - 1]]{
+            return true
+        }
+        return false
     }
+    
+    var canGoForward: Bool {
+        // FIXME: Return correct value
+        if let _ = self.nextNode {
+            return true
+        }
+        return false
+    }
+    
+    var canRetrace: Bool {
+        return navigationHistory.count > 1
+    }
+    
     func goBack() {
         print(#function, precedingNode ?? "")
         switch (precedingNode, currentNode) {
@@ -267,41 +296,21 @@ class ViewController: NSViewController, NSTextViewDelegate {
         parse(prev.contents, attributes: prev.typingAttributes)
         currentNode = prev.name
     }
-    @IBAction func didSelectOpen(_ sender:NSMenuItem) {
-        print(#function, sender)
-    }
-    @IBAction func didPressNext(_ sender: NSButton) {
+    
+    func goForward() {
         print(#function, nextNode ?? "not found")
         guard let nextNode = nextNode,
             let next = allNodes[nextNode]
             //case .node(name: _, title: _, contents: let contents) = next
-        else {
-            if let current = currentNode, let index = nodeOrder.index(of: current), index < nodeOrder.count - 1, let next = allNodes[nodeOrder[index + 1]] {
-                parse(next.contents, attributes: next.typingAttributes)
-                currentNode = next.name
-            }
-            return
+            else {
+                if let current = currentNode, let index = nodeOrder.index(of: current), index < nodeOrder.count - 1, let next = allNodes[nodeOrder[index + 1]] {
+                    parse(next.contents, attributes: next.typingAttributes)
+                    currentNode = next.name
+                }
+                return
         }
         parse(next.contents, attributes: next.typingAttributes)
         currentNode = next.name
-    }
-    @IBAction func didPressRetrace(_ sender: Any) {
-        print(#function)
-        self.retrace()
-    }
-    
-    @IBAction func didPressContents(_ sender: Any) {
-    }
-}
-
-extension ViewController: NavigationController {
-    var canGoBack: Bool {
-        return !navigationHistory.isEmpty
-    }
-    
-    var canGoForward: Bool {
-        // FIXME: Return correct value
-        return false
     }
     
     func retrace() {
@@ -311,7 +320,7 @@ extension ViewController: NavigationController {
             }
         }
         print(#function, navigationHistory)
-        guard navigationHistory.count > 1 else {
+        guard canRetrace else {
             return
         }
         _ = navigationHistory.removeLast()
