@@ -61,27 +61,43 @@ class ViewController: NSViewController, NSTextViewDelegate {
         }
  */
         //let fixedWidth = NSFont(name: "TopazPlus a600a1200a4000", size: 14)
-        let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
+        //let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
         
         textView.enclosingScrollView?.hasHorizontalScroller = true
-        
-        var typingAttributes = textView.typingAttributes
-        typingAttributes.updateValue(fixedWidth, forKey: .font)
+        textView.isEditable = false
         #if DEBUG
         //let parser = Parser(file: "/Dropbox/AGReader/Docs/test.guide")
         //let parser = Parser(file: "/Desktop/System3.9/Locale/Help/svenska/Sys/amigaguide.guide")
         //let parser = Parser(file: "/Downloads/E_v3.3a/Docs/BeginnersGuide/Appendices.guide")
-        let parser = Parser(file: "/Downloads/E_v3.3a/Bin/Tools/AProf/AProf.guide")
+        openFile("/Downloads/E_v3.3a/Bin/Tools/AProf/AProf.guide")
         //let parser = Parser(file: "/Dropbox/bb2guide13/Blitz2_V1.3.guide")
-        parse(parser.parseResult, attributes: typingAttributes)
         #endif
-        //if let main = allNodes["MAIN"], case let AmigaGuide.Tokens.node(name: _, title: _, contents: contents) = main {
-        guard !allNodes.isEmpty else { return print("Found no nodes") }
-        // FIXME: While the guard ensures safety, this is nevertheless ugly
-        if let main = allNodes["MAIN"] ?? allNodes[nodeOrder.first!] {
-            parse(main.contents, attributes: typingAttributes)
-            currentNode = main.name
-            navigationHistory.append(main)
+    }
+    /// Only for debug purposes
+    private func openFile(_ name:String) {
+        let url = URL(fileURLWithPath: NSHomeDirectory() + name)
+        openNewFile(from: url)
+    }
+    
+    func openNewFile(from url:URL) {
+        do {
+            let parser = try Parser(file: url)
+            let result = parser.parseResult
+            let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
+            var typingAttributes = textView.typingAttributes
+            typingAttributes.updateValue(fixedWidth, forKey: .font)
+            nodeOrder.removeAll()
+            allNodes.removeAll()
+            navigationHistory.removeAll()
+            parse(result, attributes: typingAttributes)
+            guard !allNodes.isEmpty else { return print("Found no nodes") }
+            guard let main = getMainNode() else { return print("Found no main node") }
+            parse(main.contents, attributes: main.typingAttributes)
+            //currentNode = main.name
+            present(node: main)
+        } catch {
+            //let alert = NSAlert(error: error)
+            self.presentError(error)
         }
     }
     
@@ -95,15 +111,23 @@ class ViewController: NSViewController, NSTextViewDelegate {
     fileprivate var precedingNode:String?
     // TODO: Can be surmised from top of navigationHistory
     /// Name of current node
-    fileprivate var currentNode:String?
+    fileprivate var currentNode:String? {
+        return navigationHistory.last?.name
+    }
     /// Name of table of contents node
     fileprivate var tocNode:String?
     /// Current navigation history
     fileprivate var navigationHistory:[Node] = []
     
+    fileprivate func present(node: Node) {
+        parse(node.contents, attributes: node.typingAttributes)
+        navigationHistory.append(node)
+        self.view.window?.title = node.title ?? NSLocalizedString("Unnamed node", comment: "")
+    }
+
     fileprivate func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
         var typingAttributes = attributes
-        (nextNode, precedingNode, currentNode) = (nil,nil,nil)
+        (nextNode, precedingNode, tocNode) = (nil,nil, nil)
         textView.string = ""
         
         for token in tokens {
@@ -117,6 +141,8 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 self.nextNode = next
             case .global(.prev(let prev)):
                 self.precedingNode = prev
+            case .global(.index(let index)):
+                self.tocNode = index
             case .newline, .normal(.linebreak):
                 textView.textStorage?.insert(NSAttributedString(string:"\r\n"), at: textView.textStorage!.length)
             case .plaintext(let text):
@@ -245,17 +271,26 @@ class ViewController: NSViewController, NSTextViewDelegate {
     }
     
     func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool {
+        // FIXME: Handle links to other files: @{title link file/node [line]}
         print(#function, "\"\(link)\"", charIndex)
         guard let link = link as? String, let node = allNodes[link] else { return false }
+        /*
         parse(node.contents, attributes: node.typingAttributes)
         currentNode = node.name
         navigationHistory.append(node)
-        self.view.window?.title = node.title ?? NSLocalizedString("Unnamed node", comment: "")
+         */
+        present(node: node)
         return true // Stop next responder from handling link
     }
 
     @IBAction func didSelectOpen(_ sender:NSMenuItem) {
         print(#function, sender)
+        let dialogue = NSOpenPanel()
+        dialogue.allowsMultipleSelection = false
+        dialogue.canChooseDirectories = false
+        dialogue.allowedFileTypes = ["guide"]
+        guard dialogue.runModal() == NSApplication.ModalResponse.OK, let url = dialogue.url else { return }
+        openNewFile(from: url)
     }
 }
 // MARK: - Navigation
@@ -305,14 +340,17 @@ extension ViewController: NavigationController {
                     1..<nodeOrder.endIndex ~= currentIndex,
                     let prev = allNodes[nodeOrder[currentIndex - 1]]{
                     parse(prev.contents, attributes: prev.typingAttributes)
-                    self.currentNode = prev.name
+                    //self.currentNode = prev.name
                     navigationHistory.append(prev)
                 }
                 return
         }
+        /*
         parse(prev.contents, attributes: prev.typingAttributes)
         currentNode = prev.name
         navigationHistory.append(prev)
+         */
+        present(node: prev)
     }
     
     func goForward() {
@@ -325,15 +363,21 @@ extension ViewController: NavigationController {
                     let index = nodeOrder.index(of: current),
                     index < nodeOrder.endIndex - 1,
                     let next = allNodes[nodeOrder[index + 1]] {
+                    /*
                         parse(next.contents, attributes: next.typingAttributes)
                         currentNode = next.name
                         navigationHistory.append(next)
+                     */
+                        present(node: next)
                 }
                 return
         }
+        /*
         parse(next.contents, attributes: next.typingAttributes)
         currentNode = next.name
         navigationHistory.append(next)
+        */
+        present(node: next)
     }
     
     func retrace() {
