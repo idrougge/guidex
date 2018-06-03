@@ -40,17 +40,17 @@ struct AmigaGuide {
             // FIXME: Node names can be enclosed by parentheses and containing whitespace
             case "node":
                 guard let rest = str.rest else { return nil }
-                print("rest:", rest)
-                let r=rest.range(of: "^\"?([^\"]+)\"?(?:\\s\"?([^\"]+)\"?)?\\s*$", options: .regularExpression)
-                print("range:",rest[r!])
- 
+                //let r=rest.range(of: "^\"?([^\"]+)\"?(?:\\s\"?([^\"]+)\"?)?\\s*$", options: .regularExpression)
+                
                 let regex = try! NSRegularExpression(pattern: "^\"?([^\"]+)\"?(?:\\s\"?([^\"]+)\"?)?\\s*$", options: [])
                 guard let match = regex.firstMatch(in: rest, options: .anchored, range: NSRange(rest.startIndex..., in: rest)) else { fatalError() }
                 assert(match.numberOfRanges == 3)
+                /*
                 for i in 0..<match.numberOfRanges {
                     guard let range = Range(match.range(at: i), in: rest) else { continue }
                     print("\(i):", String(rest[Range(match.range(at: i), in: rest)!]))
                 }
+                 */
                 let name = String(rest[Range(match.range(at: 1), in: rest)!])
                 var title:String?
                 if let range = Range(match.range(at: 2), in: rest) {
@@ -175,15 +175,21 @@ struct AmigaGuide {
 
 class Parser {
 
-    var parseResult:[AmigaGuide.Tokens] = []
+    private(set) var parseResult:[AmigaGuide.Tokens] = []
     
     init(file:String) {
         let fileURL = URL(fileURLWithPath: NSHomeDirectory() + file)
-        // FIXME: Handle error instead of forcing try
+        // Brute-forcing because this init is only used for debug purposes
         let fileContents = try! String(contentsOf: fileURL, encoding: .isoLatin1)
         parseFile(fileContents)
     }
-    func parseFile(_ contents:String) {
+    
+    init(file url:URL) throws {
+        let fileContents = try String(contentsOf: url, encoding: .isoLatin1)
+        parseFile(fileContents)
+    }
+    
+    private func parseFile(_ contents:String) {
         var start = contents.startIndex
         while start < contents.endIndex {
             let (t, pos):(AmigaGuide.Tokens?, String.Index) = getTokens(contents, from: start)
@@ -193,7 +199,7 @@ class Parser {
             start = pos
         }
     }
-    func getTokens(_ contents:String, from:String.Index) -> (AmigaGuide.Tokens?, String.Index) {
+    private func getTokens(_ contents:String, from:String.Index) -> (AmigaGuide.Tokens?, String.Index) {
         let contents_copy = contents
         let contents = contents[from...]
         //print(#function, from, String(contents))
@@ -253,7 +259,7 @@ class Parser {
             return (nil, from)
         }
     }
-    func unescape(_ line:String) -> String {
+    private func unescape(_ line:String) -> String {
         if let backslash = line.index(of: "\\") {
             let escaped = line.index(after: backslash)
             return line + unescape(String(line[escaped...]))
