@@ -9,6 +9,7 @@
 import Cocoa
 
 fileprivate typealias TypingAttributes = [NSAttributedStringKey:Any]
+
 fileprivate class Node {
     let name:String
     let title:String?
@@ -81,19 +82,19 @@ class ViewController: NSViewController, NSTextViewDelegate {
         }
     }
     
-    //var allNodes:[String:AmigaGuide.Tokens] = [:]
+    /// All nodes in a parsed file
     fileprivate var allNodes:[String:Node] = [:]
     /// Names of all nodes in order of appearance, for fetching
-    var nodeOrder:[String] = []
+    fileprivate var nodeOrder:[String] = []
     /// Name of @NEXT node
-    var nextNode:String?
+    fileprivate var nextNode:String?
     /// Name of @PREV node
-    var precedingNode:String?
+    fileprivate var precedingNode:String?
     // TODO: Can be surmised from top of navigationHistory
     /// Name of current node
-    var currentNode:String?
+    fileprivate var currentNode:String?
     /// Name of table of contents node
-    var tocNode:String?
+    fileprivate var tocNode:String?
     /// Current navigation history
     fileprivate var navigationHistory:[Node] = []
     
