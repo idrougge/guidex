@@ -28,6 +28,11 @@ class WindowController: NSWindowController {
         }
     }
     
+    @IBAction func didPressNext(_ sender: Any) {
+        print(#function)
+        navigationController?.goForward()
+    }
+    
     @IBAction func didPressRetrace(_ sender: Any) {
         print(#function)
         navigationController?.retrace()

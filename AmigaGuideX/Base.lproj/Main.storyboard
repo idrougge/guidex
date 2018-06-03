@@ -708,6 +708,9 @@
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
+                                    <connections>
+                                        <action selector="didPressNext:" target="B8D-0N-5wS" id="pwL-NO-Fpg"/>
+                                    </connections>
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="1C20499D-4303-4DB4-8A85-851C609E4F0C" explicitItemIdentifier="left" label="Left" paletteLabel="Left" image="NSGoLeftTemplate" id="5DX-2l-gOy">
                                     <nil key="toolTip"/>
