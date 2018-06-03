@@ -28,6 +28,8 @@ fileprivate class Node {
 protocol NavigationController {
     var canGoBack: Bool {get}
     var canGoForward: Bool {get}
+    func goBack()
+    func retrace()
 }
 
 class ViewController: NSViewController, NSTextViewDelegate {
@@ -81,6 +83,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
         if let main = allNodes["MAIN"] ?? allNodes[nodeOrder.first!] {
             parse(main.contents, attributes: typingAttributes)
             currentNode = main.name
+            navigationHistory.append(main)
         }
     }
     
@@ -218,7 +221,6 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 let paragraph = p.mutableCopy() as! NSMutableParagraphStyle
                 paragraph.tabStops = self.paragraph.tabStops
                 typingAttributes[.paragraphStyle] = paragraph
-            case .global(.remark): break
             case .global(.title(let title)): self.view.window?.title = title
             default:
                 typingAttributes.updateValue(NSColor.red, forKey: .foregroundColor)
@@ -241,6 +243,9 @@ class ViewController: NSViewController, NSTextViewDelegate {
     @IBAction func didPressButton(_ sender: NSButton) {
     }
     @IBAction func didPressPrevious(_ sender: NSButton) {
+        goBack()
+    }
+    func goBack() {
         print(#function, precedingNode ?? "")
         switch (precedingNode, currentNode) {
         case (let precedingNode?, _): break
@@ -282,16 +287,9 @@ class ViewController: NSViewController, NSTextViewDelegate {
     }
     @IBAction func didPressRetrace(_ sender: Any) {
         print(#function)
-        if !navigationHistory.isEmpty {
-            navigationHistory.removeLast()
-        }
-        //self.view.window.validate
-        self.view.window?.toolbar?.items.forEach{ item in
-            //self.view.window?.validateToolbarItem(item)
-            self.view.window?.windowController?.validateToolbarItem(item)
-            
-        }
+        self.retrace()
     }
+    
     @IBAction func didPressContents(_ sender: Any) {
     }
 }
@@ -302,8 +300,26 @@ extension ViewController: NavigationController {
     }
     
     var canGoForward: Bool {
+        // FIXME: Return correct value
         return false
     }
     
-    
+    func retrace() {
+        defer {
+            self.view.window?.toolbar?.items.forEach{ item in
+                self.view.window?.windowController?.validateToolbarItem(item)
+            }
+        }
+        print(#function, navigationHistory)
+        guard navigationHistory.count > 1 else {
+            return
+        }
+        _ = navigationHistory.removeLast()
+        guard let last = navigationHistory.last//popLast()
+            else {
+                return
+        }
+        parse(last.contents, attributes: last.typingAttributes)
+        currentNode = last.name
+    }
 }

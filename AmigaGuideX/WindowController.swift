@@ -23,9 +23,12 @@ class WindowController: NSWindowController {
     }
     @IBAction func didPressPrevious(_ sender: Any) {
         print(#function)
+        if navigationController?.canGoBack == true {
+            navigationController?.goBack()
+        }
     }
     override func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
-        print(#function, item, item.itemIdentifier)
+        //print(#function, item, item.itemIdentifier)
         if item.itemIdentifier.rawValue == "left" {
             //item.isEnabled = false
             //return false
@@ -37,7 +40,7 @@ class WindowController: NSWindowController {
 
 class Toolbar: NSToolbar {
     override func validateVisibleItems() {
-        print(#function)
+        //print(#function)
         for item in items {
             var responder = item.view?.nextResponder
             while responder != nil {
