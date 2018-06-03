@@ -47,7 +47,9 @@ class AmigaGuideXTests: XCTestCase {
         @{" Freeing Resources " Link "Freeing Resources"
         @{" Pointers and Dereferencing " Link "Pointers and Dereferencing"
         @{" Mathematics Functions " Link "Mathematics Functions"
-        @{" Signed and Unsigned Values " Link "Signed and Unsigned Values" 
+        @{" Signed and Unsigned Values " Link "Signed and Unsigned Values"
+        @{" A4 register " Link "MoreExpressions.guide/Things to watch out for"
+        @{" A4 register " Link "MoreExpressions.guide/Things to watch out for" 11
         """.components(separatedBy: .newlines)
         let labels:[(String,String)] = [
         (" Amiga E ", "amiga-e"),
@@ -66,6 +68,8 @@ class AmigaGuideXTests: XCTestCase {
         (" Pointers and Dereferencing ", "Pointers and Dereferencing"),
         (" Mathematics Functions ", "Mathematics Functions"),
         (" Signed and Unsigned Values ", "Signed and Unsigned Values"),
+        (" A4 register ", "MoreExpressions.guide/Things to watch out for"),
+        (" A4 register ", "MoreExpressions.guide/Things to watch out for"),
         ]
         for (nr,(line,(label,nodename))) in zip(linkExamples,labels).enumerated() {
             print(nr, line)
