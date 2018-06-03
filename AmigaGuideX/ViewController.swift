@@ -276,12 +276,6 @@ extension ViewController: NavigationController {
     
     func goBack() {
         print(#function, precedingNode ?? "")
-        switch (precedingNode, currentNode) {
-        case (let precedingNode?, _): break
-        case (_, let current?) where current == "a" && 1>2: break
-        case (_, let currentNode?): break
-        default: break
-        }
         guard let prevNode = precedingNode,
             let prev = allNodes[prevNode] else {
                 if let currentNode = currentNode,
