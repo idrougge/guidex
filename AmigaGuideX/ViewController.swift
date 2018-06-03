@@ -44,15 +44,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
         print(#function, menuItem)
         return true
     }
-    func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool {
-        print(#function, "\"\(link)\"", charIndex)
-        guard let link = link as? String, let node = allNodes[link] else { return false }
-        parse(node.contents, attributes: node.typingAttributes)
-        currentNode = node.name
-        navigationHistory.append(node)
-        self.view.window?.title = node.title ?? NSLocalizedString("Unnamed node", comment: "")
-        return true // Stop next responder from handling link
-    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.delegate = self
@@ -241,6 +233,16 @@ class ViewController: NSViewController, NSTextViewDelegate {
         // Update the view, if already loaded.
         }
     }
+    
+    func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool {
+        print(#function, "\"\(link)\"", charIndex)
+        guard let link = link as? String, let node = allNodes[link] else { return false }
+        parse(node.contents, attributes: node.typingAttributes)
+        currentNode = node.name
+        navigationHistory.append(node)
+        self.view.window?.title = node.title ?? NSLocalizedString("Unnamed node", comment: "")
+        return true // Stop next responder from handling link
+    }
 
     @IBAction func didSelectOpen(_ sender:NSMenuItem) {
         print(#function, sender)
@@ -250,12 +252,14 @@ class ViewController: NSViewController, NSTextViewDelegate {
 extension ViewController: NavigationController {
     var canGoBack: Bool {
         // TODO: This should only be calculated when navigating between nodes
+        // Alternative 1: The current node contains an explicit @PREV marker
         if let prev = precedingNode, let _ = allNodes[prev] {
             return true
         }
+        // Alternative 2: Previous node is implicit, so check if not on the very first node in file
         if let currentNode = currentNode,
             let currentIndex = nodeOrder.index(of: currentNode),
-            1 ..< nodeOrder.count ~= currentIndex,
+            currentIndex > 0,
             let _ = allNodes[nodeOrder[currentIndex - 1]]{
             return true
         }
@@ -263,9 +267,12 @@ extension ViewController: NavigationController {
     }
     
     var canGoForward: Bool {
-        // FIXME: Return correct value
         if let _ = self.nextNode {
             return true
+        }
+        if let current = currentNode,
+            let index = nodeOrder.index(of: current) {
+            return index < nodeOrder.endIndex - 1
         }
         return false
     }
@@ -276,35 +283,43 @@ extension ViewController: NavigationController {
     
     func goBack() {
         print(#function, precedingNode ?? "")
-        guard let prevNode = precedingNode,
+        guard
+            let prevNode = precedingNode,
             let prev = allNodes[prevNode] else {
                 if let currentNode = currentNode,
                     let currentIndex = nodeOrder.index(of: currentNode),
-                    1..<nodeOrder.count ~= currentIndex,
+                    1..<nodeOrder.endIndex ~= currentIndex,
                     let prev = allNodes[nodeOrder[currentIndex - 1]]{
                     parse(prev.contents, attributes: prev.typingAttributes)
                     self.currentNode = prev.name
+                    navigationHistory.append(prev)
                 }
                 return
         }
         parse(prev.contents, attributes: prev.typingAttributes)
         currentNode = prev.name
+        navigationHistory.append(prev)
     }
     
     func goForward() {
         print(#function, nextNode ?? "not found")
-        guard let nextNode = nextNode,
+        guard
+            let nextNode = nextNode,
             let next = allNodes[nextNode]
-            //case .node(name: _, title: _, contents: let contents) = next
             else {
-                if let current = currentNode, let index = nodeOrder.index(of: current), index < nodeOrder.count - 1, let next = allNodes[nodeOrder[index + 1]] {
-                    parse(next.contents, attributes: next.typingAttributes)
-                    currentNode = next.name
+                if let current = currentNode,
+                    let index = nodeOrder.index(of: current),
+                    index < nodeOrder.endIndex - 1,
+                    let next = allNodes[nodeOrder[index + 1]] {
+                        parse(next.contents, attributes: next.typingAttributes)
+                        currentNode = next.name
+                        navigationHistory.append(next)
                 }
                 return
         }
         parse(next.contents, attributes: next.typingAttributes)
         currentNode = next.name
+        navigationHistory.append(next)
     }
     
     func retrace() {
