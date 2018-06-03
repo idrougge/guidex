@@ -14,7 +14,6 @@ class WindowController: NSWindowController {
     
     override func windowDidLoad() {
         super.windowDidLoad()
-        print(type(of: self), #function, window?.contentView?.subviews, window?.contentViewController is ViewController)
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
         //self.window?.becomeFirstResponder()
         //window?.toolbar?.validateVisibleItems()
@@ -40,16 +39,19 @@ class WindowController: NSWindowController {
     
     @IBAction func didPressContents(_ sender: Any) {
         print(#function)
+        navigationController?.goToMain()
     }
     
     @IBAction func didPressIndex(_ sender: Any) {
         print(#function)
+        navigationController?.goToIndex()
     }
     override func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         //print(#function, item, item.itemIdentifier)
         let paths = ["left": \NavigationController.canGoBack,
                      "right": \NavigationController.canGoForward,
-                     "retrace": \NavigationController.canRetrace]
+                     "retrace": \NavigationController.canRetrace,
+                     "index": \NavigationController.hasIndex]
         guard
             let navigationController = navigationController,
             let path = paths[item.itemIdentifier.rawValue]

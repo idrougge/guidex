@@ -22,6 +22,7 @@ struct AmigaGuide {
         case endnode
         case prev(String) // PREV has pointer to next nodename
         case next(String) // NEXT has pointer to next nodename
+        case index(String) // Name of node to show when Index button is pressed
         indirect case node_(name:String, headline: String?, next:ToplevelTokens?, prev:ToplevelTokens?, contents:[AmigaGuide.Tokens])
         case title(String)
         case wordwrap
@@ -84,6 +85,9 @@ struct AmigaGuide {
             case "help":
                 guard let node = str.rest else { return nil }
                 self = .help(node)
+            case "index":
+                guard let node = str.rest else { return nil }
+                self = .index(node)
             default: return nil
             }
         }

@@ -30,9 +30,12 @@ protocol NavigationController {
     var canGoBack: Bool {get}
     var canGoForward: Bool {get}
     var canRetrace: Bool {get}
+    var hasIndex: Bool {get}
     func goBack()
     func goForward()
     func retrace()
+    func goToMain()
+    func goToIndex()
 }
 
 class ViewController: NSViewController, NSTextViewDelegate {
@@ -228,7 +231,13 @@ class ViewController: NSViewController, NSTextViewDelegate {
     func tabSize(spaces:Int, attributes:[NSAttributedStringKey:Any]) -> CGFloat {
         return String(repeating: " ", count: spaces).size(withAttributes: attributes).width
     }
-    
+
+    /// Retrieve MAIN node or, if not available, first node in document
+    private func getMainNode() -> Node? {
+        guard let first = nodeOrder.first else { return nil }
+        return allNodes["MAIN"] ?? allNodes[first]
+    }
+
     override var representedObject: Any? {
         didSet {
         // Update the view, if already loaded.
@@ -280,6 +289,10 @@ extension ViewController: NavigationController {
     
     var canRetrace: Bool {
         return navigationHistory.count > 1
+    }
+    
+    var hasIndex: Bool {
+        return tocNode != nil
     }
     
     func goBack() {
@@ -339,6 +352,17 @@ extension ViewController: NavigationController {
                 return
         }
         parse(last.contents, attributes: last.typingAttributes)
-        currentNode = last.name
+        //currentNode = last.name
     }
+    
+    func goToMain() {
+        guard let main = getMainNode() else { return }
+        present(node: main)
+    }
+    
+    func goToIndex() {
+        guard let name = tocNode, let index = allNodes[name] else { return }
+        present(node: index)
+    }
+    
 }
