@@ -696,12 +696,12 @@
                                 <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="gtA-V5-NYN"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="59R-Tp-0Ee"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="0dQ-yz-GSS"/>
-                                <toolbarItem implicitItemIdentifier="AB59041F-840D-4B98-92CD-C710924F4BCF" explicitItemIdentifier="right" label="Right" paletteLabel="Right" image="NSGoForwardTemplate" id="Snp-t6-jnp">
+                                <toolbarItem implicitItemIdentifier="AB59041F-840D-4B98-92CD-C710924F4BCF" explicitItemIdentifier="right" label="Browse" paletteLabel="Browse &gt;" image="NSGoForwardTemplate" id="Snp-t6-jnp">
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="40" height="25"/>
                                     <size key="maxSize" width="127" height="25"/>
                                     <button key="view" verticalHuggingPriority="750" id="LTK-rP-IeU">
-                                        <rect key="frame" x="0.0" y="14" width="41" height="25"/>
+                                        <rect key="frame" x="8" y="14" width="41" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSGoForwardTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jWU-zZ-NTp">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -712,12 +712,12 @@
                                         <action selector="didPressNext:" target="B8D-0N-5wS" id="pwL-NO-Fpg"/>
                                     </connections>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="1C20499D-4303-4DB4-8A85-851C609E4F0C" explicitItemIdentifier="left" label="Left" paletteLabel="Left" image="NSGoLeftTemplate" id="5DX-2l-gOy">
+                                <toolbarItem implicitItemIdentifier="1C20499D-4303-4DB4-8A85-851C609E4F0C" explicitItemIdentifier="left" label="Browse" paletteLabel="Browse &lt;" image="NSGoLeftTemplate" id="5DX-2l-gOy">
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="41" height="25"/>
                                     <size key="maxSize" width="127" height="25"/>
                                     <button key="view" verticalHuggingPriority="750" id="Mms-hA-DW6">
-                                        <rect key="frame" x="0.0" y="14" width="41" height="25"/>
+                                        <rect key="frame" x="8" y="14" width="41" height="25"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSGoLeftTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WZQ-ju-UL0">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
