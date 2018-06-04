@@ -80,9 +80,9 @@ class AmigaGuideXTests: XCTestCase {
         }
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testMacro() {
+        guard let _ = AmigaGuide.ToplevelTokens.init(str: "@macro bold \"@{b} $1 @{ub}\"") else { return XCTFail("Test is not correctly written. Macro resolver must be implemented in parser.") }
+        guard let resolved = AmigaGuide.TextTokens.init("@{bold \"bold\"") else { return XCTFail("Test is not correctly written. Macro resolver must be implemented in parser.") }
     }
     
     func testPerformanceExample() {
