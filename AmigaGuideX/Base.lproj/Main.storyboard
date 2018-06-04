@@ -203,40 +203,40 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Go" id="sqa-Kj-fWQ">
                                     <items>
-                                        <menuItem title="Retrace" keyEquivalent="" id="xVM-3F-q99">
+                                        <menuItem title="Retrace" keyEquivalent="" identifier="retrace" id="xVM-3F-q99">
                                             <connections>
-                                                <action selector="cut:" target="Ady-hI-5gd" id="0YL-kq-NWf"/>
+                                                <action selector="didPressRetrace:" target="Ady-hI-5gd" id="f8J-gn-vdW"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="bnr-wY-z5s"/>
-                                        <menuItem title="Browse" keyEquivalent="&lt;" id="vLR-px-Ofn">
+                                        <menuItem title="Browse" keyEquivalent="&lt;" identifier="left" id="vLR-px-Ofn">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="copy:" target="Ady-hI-5gd" id="cWH-Tp-9kv"/>
+                                                <action selector="didPressPrevious:" target="Ady-hI-5gd" id="PBQ-xO-FKj"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Browse" keyEquivalent="&gt;" id="nKC-Kr-ImW">
+                                        <menuItem title="Browse" keyEquivalent="&gt;" identifier="right" id="nKC-Kr-ImW">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="selectAll:" target="Ady-hI-5gd" id="MpX-E3-Cwo"/>
+                                                <action selector="didPressNext:" target="Ady-hI-5gd" id="F6L-jI-Bb3"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="E5P-Jh-L9v"/>
-                                        <menuItem title="Contents" keyEquivalent="H" id="5W4-3Y-OdH">
+                                        <menuItem title="Contents" keyEquivalent="H" identifier="contents" id="5W4-3Y-OdH">
                                             <connections>
-                                                <action selector="selectAll:" target="Ady-hI-5gd" id="WcS-Lb-cWw"/>
+                                                <action selector="didPressContents:" target="Ady-hI-5gd" id="xhM-lh-hTh"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Index" keyEquivalent="i" id="8dX-2x-yhH">
+                                        <menuItem title="Index" keyEquivalent="i" identifier="index" id="8dX-2x-yhH">
                                             <connections>
-                                                <action selector="selectAll:" target="Ady-hI-5gd" id="ujU-5x-R6C"/>
+                                                <action selector="didPressIndex:" target="Ady-hI-5gd" id="EGT-lI-TVQ"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Voa-LX-cac"/>
                                         <menuItem title="Page down" keyEquivalent=" " id="Con-hQ-TFc">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="selectAll:" target="Ady-hI-5gd" id="SFK-Kp-T5a"/>
+                                                <action selector="didPressSpace:" target="Ady-hI-5gd" id="dIJ-M2-TxN"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Page up" id="Yd8-gC-aIE">
@@ -245,7 +245,7 @@ CA
 </string>
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
-                                                <action selector="selectAll:" target="Ady-hI-5gd" id="grv-go-gJ1"/>
+                                                <action selector="didPressBackspace:" target="Ady-hI-5gd" id="apb-b1-WCd"/>
                                             </connections>
                                         </menuItem>
                                     </items>

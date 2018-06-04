@@ -46,6 +46,28 @@ class WindowController: NSWindowController {
         print(#function)
         navigationController?.goToIndex()
     }
+    
+    @IBAction func didPressSpace(_ sender:NSMenuItem) {
+        self.contentViewController?.pageDown(sender)
+    }
+    
+    @IBAction func didPressBackspace(_ sender:NSMenuItem) {
+        self.contentViewController?.pageUp(sender)
+    }
+    
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+        //print(#function, menuItem, menuItem.identifier, menuItem.identifier?.rawValue)
+        let paths = ["left": \NavigationController.canGoBack,
+                     "right": \NavigationController.canGoForward,
+                     "retrace": \NavigationController.canRetrace,
+                     "index": \NavigationController.hasIndex]
+        guard
+            let navigationController = navigationController,
+            let identifier = menuItem.identifier?.rawValue,
+            let path = paths[identifier] else { return true }
+        return navigationController[keyPath: path]
+    }
+    
     override func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         //print(#function, item, item.itemIdentifier)
         let paths = ["left": \NavigationController.canGoBack,
@@ -60,6 +82,15 @@ class WindowController: NSWindowController {
         }
         item.isEnabled = navigationController[keyPath: path]
         return item.isEnabled
+    }
+    
+    override func keyUp(with event: NSEvent) {
+        //print(#function, event, event.characters?.count, event.characters?.utf16)
+        switch event.characters {
+        case "<"?: self.didPressPrevious(event)
+        case ">"?: self.didPressNext(event)
+        default: return
+        }
     }
 }
 

@@ -292,7 +292,15 @@ class ViewController: NSViewController, NSTextViewDelegate {
         guard dialogue.runModal() == NSApplication.ModalResponse.OK, let url = dialogue.url else { return }
         openNewFile(from: url)
     }
+    
+    override func pageDown(_ sender: Any?) {
+        textView.pageDown(sender)
+    }
+    override func pageUp(_ sender: Any?) {
+        textView.pageUp(sender)
+    }
 }
+
 // MARK: - Navigation
 extension ViewController: NavigationController {
     var canGoBack: Bool {
