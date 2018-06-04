@@ -169,7 +169,7 @@ struct AmigaGuide {
                     self = .link(label: label, node: node, line: nil)
                 default:
                     print(tok.pre)
-                    fatalError("\(tok.pre), \(tok.rest ?? "nil")")
+                    assertionFailure("\(tok.pre), \(tok.rest ?? "nil")")
                     return nil
                 }
             }
