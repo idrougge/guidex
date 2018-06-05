@@ -178,6 +178,9 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 let font = manager.convert(textView.font!, toNotHaveTrait: [.boldFontMask, .italicFontMask])
                 typingAttributes.updateValue(font, forKey: .font)
                 typingAttributes.removeValue(forKey: .underlineStyle)
+                let paragraph = self.paragraph.mutableCopy() as! NSMutableParagraphStyle
+                paragraph.lineBreakMode = .byWordWrapping
+                typingAttributes[.paragraphStyle] = paragraph
             case .normal(.link(let label, let node, _)):
                 // FIXME: System and REXX links must be discarded in a sensible way
                 // TODO: Register URL scheme
@@ -198,7 +201,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 typingAttributes.updateValue(p, forKey: .paragraphStyle)
                 textView.textStorage?.append(NSAttributedString(string: "LINDENT \(indentation) \(textView.textStorage!.length) \(width)", attributes: typingAttributes))
             case .normal(.code):
-                // TODO: Turn off word wrapping
+                // Turn off word wrapping
                 let paragraph = self.paragraph.mutableCopy() as! NSMutableParagraphStyle
                 paragraph.lineBreakMode = .byTruncatingTail
                 paragraph.lineBreakMode = .byClipping
