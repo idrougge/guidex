@@ -122,7 +122,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
     fileprivate func present(node: Node) {
         parse(node.contents, attributes: node.typingAttributes)
         navigationHistory.append(node)
-        self.view.window?.title = node.title ?? NSLocalizedString("Unnamed node", comment: "")
+        self.view.window?.title = node.title ?? node.name
     }
 
     fileprivate func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
@@ -289,7 +289,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
         dialogue.allowsMultipleSelection = false
         dialogue.canChooseDirectories = false
         dialogue.allowedFileTypes = ["guide"]
-        guard dialogue.runModal() == NSApplication.ModalResponse.OK, let url = dialogue.url else { return }
+        guard dialogue.runModal() == .OK, let url = dialogue.url else { return }
         openNewFile(from: url)
     }
     
