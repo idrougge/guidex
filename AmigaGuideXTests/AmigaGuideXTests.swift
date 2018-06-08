@@ -21,17 +21,18 @@ class AmigaGuideXTests: XCTestCase {
         super.tearDown()
     }
     func testNodeTokeniser() {
-        
-        guard case AmigaGuide.ToplevelTokens.node(let name, let title) = AmigaGuide.ToplevelTokens.init(str: "@{\"Hej\" link MAIN")! else {
+        guard case AmigaGuide.ToplevelTokens.node("MAIN", "A normal node"?)? = AmigaGuide.ToplevelTokens.init(str: "NODE MAIN \"A normal node\"") else {
             return XCTFail()
         }
- 
-        XCTAssert(name == "MAIN")
-        XCTAssert(title == "Hej")
+        
+        guard case AmigaGuide.ToplevelTokens.node("MAIN", "A node with double space"?)? = AmigaGuide.ToplevelTokens.init(str: "NODE MAIN  \"A node with double space\"") else {
+            return XCTFail()
+        }
     }
     func testLinkTokeniser() {
         
         let linkExamples:[String] = """
+        @{"Hej" link MAIN
         @{ " Amiga E " link amiga-e 
         @{ " Aztec C " link manx-c
         @{ " DICE C " link dice-c
@@ -52,6 +53,7 @@ class AmigaGuideXTests: XCTestCase {
         @{" A4 register " Link "MoreExpressions.guide/Things to watch out for" 11
         """.components(separatedBy: .newlines)
         let labels:[(String,String)] = [
+        ("Hej", "MAIN"),
         (" Amiga E ", "amiga-e"),
         (" Aztec C ", "manx-c"),
         (" DICE C ", "dice-c"),

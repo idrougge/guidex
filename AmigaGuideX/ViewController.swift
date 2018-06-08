@@ -82,6 +82,12 @@ class ViewController: NSViewController, NSTextViewDelegate {
     func openNewFile(from url:URL) {
         do {
             let parser = try Parser(file: url)
+            print(url.deletingLastPathComponent().path)
+            guard FileManager.default.changeCurrentDirectoryPath(url.deletingLastPathComponent().path) else {
+                throw NSError(domain: NSCocoaErrorDomain,
+                              code: NSFileNoSuchFileError,
+                              userInfo: [NSFilePathErrorKey:url.path])
+                }
             let result = parser.parseResult
             let fixedWidth = NSFont.userFixedPitchFont(ofSize: 12)!
             var typingAttributes = textView.typingAttributes
@@ -93,10 +99,9 @@ class ViewController: NSViewController, NSTextViewDelegate {
             guard !allNodes.isEmpty else { return print("Found no nodes") }
             guard let main = getMainNode() else { return print("Found no main node") }
             parse(main.contents, attributes: main.typingAttributes)
-            //currentNode = main.name
             present(node: main)
         } catch {
-            //let alert = NSAlert(error: error)
+            print(error)
             self.presentError(error)
         }
     }
@@ -127,14 +132,13 @@ class ViewController: NSViewController, NSTextViewDelegate {
 
     fileprivate func parse(_ tokens:[AmigaGuide.Tokens], attributes:TypingAttributes) {
         var typingAttributes = attributes
-        (nextNode, precedingNode, tocNode) = (nil,nil, nil)
+        (nextNode, precedingNode, tocNode) = (nil,nil,nil)
         textView.string = ""
         
         for token in tokens {
             switch token {
             case let .node(name: name, title: _, contents: _):
-                //allNodes[name] = token
-                let node = Node.init(token, attributes: attributes)
+                let node = Node(token, attributes: attributes)
                 allNodes[name] = node
                 nodeOrder.append(name)
             case .global(.next(let next)):
@@ -187,7 +191,6 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 typingAttributes[.link] = node
                 let text = NSAttributedString(string: label, attributes: typingAttributes)
                 textView.textStorage?.append(text)
-                //textView.insertText(text)
                 typingAttributes.removeValue(forKey: .link)
             case .escaped(let escaped):
                 textView.textStorage?.append(NSAttributedString(string: escaped, attributes: typingAttributes))
