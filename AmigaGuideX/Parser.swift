@@ -41,10 +41,16 @@ struct AmigaGuide {
             // FIXME: Node names can be enclosed by parentheses and containing whitespace
             case "node":
                 guard let rest = str.rest else { return nil }
-                //let r=rest.range(of: "^\"?([^\"]+)\"?(?:\\s\"?([^\"]+)\"?)?\\s*$", options: .regularExpression)
-                
+
                 let regex = try! NSRegularExpression(pattern: "^\"?([^\"]+)\"?(?:\\s\"?([^\"]+)\"?)?\\s*$", options: [])
-                guard let match = regex.firstMatch(in: rest, options: .anchored, range: NSRange(rest.startIndex..., in: rest)) else { fatalError() }
+                guard
+                    let match = regex.firstMatch(in: rest,
+                                                 options: .anchored,
+                                                 range: NSRange(rest.startIndex..., in: rest))
+                    else {
+                        assertionFailure()
+                        return nil
+                }
                 assert(match.numberOfRanges == 3)
                 /*
                 for i in 0..<match.numberOfRanges {
