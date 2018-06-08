@@ -266,6 +266,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
 
     /// Retrieve MAIN node or, if not available, first node in document
     private func getMainNode() -> Node? {
+        // FIXME: Main node can be both upper, lower and mixed case
         guard let first = nodeOrder.first else { return nil }
         return allNodes["MAIN"] ?? allNodes[first]
     }
@@ -279,14 +280,31 @@ class ViewController: NSViewController, NSTextViewDelegate {
     func textView(_ textView: NSTextView, clickedOnLink link: Any, at charIndex: Int) -> Bool {
         // FIXME: Handle links to other files: @{title link file/node [line]}
         print(#function, "\"\(link)\"", charIndex)
-        guard let link = link as? String, let node = allNodes[link] else { return false }
+        guard let link = link as? String else { return false }
+        if let node = allNodes[link] {
+            present(node: node)
+            return true // Stop next responder from handling link
+        }
+        let pathComponents = link.components(separatedBy: "/")
+        guard
+            pathComponents.count > 1,
+            let node = pathComponents.last,
+            !node.isEmpty
+            else { return true }
+        let filename = pathComponents[..<(pathComponents.endIndex-1)].joined(separator: "/")
+        let url:URL// = URL(fileURLWithPath: filename)
         /*
-        parse(node.contents, attributes: node.typingAttributes)
-        currentNode = node.name
-        navigationHistory.append(node)
-         */
-        present(node: node)
-        return true // Stop next responder from handling link
+        if #available(OSX 10.11, *) {
+            url = URL(fileURLWithPath: filename,
+                      relativeTo: URL(fileURLWithPath: FileManager.default.currentDirectoryPath))
+        } else {
+            url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath + "/" + filename)
+        }
+        */
+        url = URL(fileURLWithPath: filename)
+        print(url.absoluteString)
+        openNewFile(from: url)
+        return true
     }
 
     @IBAction func didSelectOpen(_ sender:NSMenuItem) {
