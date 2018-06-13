@@ -21,6 +21,10 @@ class AmigaGuideXTests: XCTestCase {
         super.tearDown()
     }
     func testNodeTokeniser() {
+        guard case AmigaGuide.ToplevelTokens.node("MAIN", _)? = AmigaGuide.ToplevelTokens.init(str: "NODE MAIN") else {
+            return XCTFail()
+        }
+
         guard case AmigaGuide.ToplevelTokens.node("MAIN", "A normal node"?)? = AmigaGuide.ToplevelTokens.init(str: "NODE MAIN \"A normal node\"") else {
             return XCTFail()
         }
