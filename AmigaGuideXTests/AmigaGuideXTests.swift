@@ -75,10 +75,12 @@ class AmigaGuideXTests: XCTestCase {
         ]
         for (nr,(line,(label,nodename))) in zip(linkExamples,labels).enumerated() {
             print(nr, line)
-            guard let token = AmigaGuide.TextTokens.init(line) else { return XCTFail(line) }
-            guard case let AmigaGuide.TextTokens.link(title, node: node, line: _) = token else {return XCTFail() }
-            XCTAssert(node == nodename, "'\(node)' <> '\(nodename)'")
-            XCTAssert(title == label)
+            let token = AmigaGuide.TextTokens.init(line)
+            XCTAssertNotNil(token, line)
+            guard case let AmigaGuide.TextTokens.link(title, node: node, line: _)? = token
+                else { return XCTFail(line) }
+            XCTAssertEqual(node, nodename)
+            XCTAssertEqual(title, label)
         }
     }
 
