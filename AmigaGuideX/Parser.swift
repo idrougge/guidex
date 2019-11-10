@@ -167,15 +167,15 @@ struct AmigaGuide {
                 case ("@{\"", _?),
                      (_, _) where str.starts(with: "@{\""):
                     // FIXME: Links can point to other files: @{title link file/node}
-                    let pattern = "^@\\{\\s*\\\"?((?<=\\\")(?:.*)(?=\\\")|(?<!\\\")(?:\\S+)(?!\\\"))\\\"?\\s+(\\w+)\\s+\\\"?((?<=\\\")(?:.*)(?=\\\")|(?<!\\\")(?:\\S+)(?!\\\"))\\\"?\\s*$"
+                    let pattern = #"(?i)@\{\s*(\"?)(.+?)(?:\1)\s+(link|system|rxs)\s+(\"?)([^\4]+?)(\4)\s*(?:\s+(\d+))?$"#
                     guard let regex = try? NSRegularExpression(pattern: pattern, options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
-                        match.numberOfRanges == 4
+                        match.numberOfRanges >= 5
                         else { return nil }
-                    let label = String(str[Range(match.range(at: 1), in: str)!])
+                    let label = String(str[Range(match.range(at: 2), in: str)!])
                     // FIXME: Handle System and REXX links by not handling them
-                    let _ = String(str[Range(match.range(at: 2), in: str)!]) // Type of link
-                    let node = String(str[Range(match.range(at: 3), in: str)!])
+                    let _ = String(str[Range(match.range(at: 3), in: str)!]) // Type of link
+                    let node = String(str[Range(match.range(at: 5), in: str)!])
                     self = .link(label: label, node: node, line: nil)
                 default:
                     print(tok.pre)
