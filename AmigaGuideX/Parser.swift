@@ -42,7 +42,11 @@ struct AmigaGuide {
             case "node":
                 guard let rest = str.rest else { return nil }
 
-                let regex = try! NSRegularExpression(pattern: "^\"?([^\"]+)\"?(?:\\s\"?([^\"]+)\"?)?\\s*$", options: [])
+                let pattern = #"(\"?)(.+?)(?:\1)(?:\ +(\"?)(.+?)(\3))?$"#
+                let regex = try! NSRegularExpression(pattern: pattern, options: [])
+//                let regex = try! NSRegularExpression(pattern: "^\"?([^\"]+)\"?(?:\\s+\"?([^\"]+)\"?)?\\s*$", options: [])
+//                let regex = try! NSRegularExpression(pattern: "^(?:(?:\"([^\"]+)\"|([^\\s]+))\\s+)(?:\"?([^\"]+)\"?)?\\s*$", options: [])
+                
                 guard
                     let match = regex.firstMatch(in: rest,
                                                  options: .anchored,
@@ -51,16 +55,16 @@ struct AmigaGuide {
                         assertionFailure()
                         return nil
                 }
-                assert(match.numberOfRanges == 3)
+//                assert(match.numberOfRanges == 3)
                 /*
                 for i in 0..<match.numberOfRanges {
                     guard let range = Range(match.range(at: i), in: rest) else { continue }
                     print("\(i):", String(rest[Range(match.range(at: i), in: rest)!]))
                 }
                  */
-                let name = String(rest[Range(match.range(at: 1), in: rest)!])
+                let name = String(rest[Range(match.range(at: 2), in: rest)!])
                 var title:String?
-                if let range = Range(match.range(at: 2), in: rest) {
+                if let range = Range(match.range(at: 4), in: rest) {
                     title = String(rest[range])
                 }
                 self = .node(name, title)
