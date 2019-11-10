@@ -156,7 +156,7 @@ struct AmigaGuide {
                 case ("@{fg",let pen?): self = .foreground(pen)
                 case ("@{lindent", let size?): self = .lindent(Int(size) ?? 0)
                 case ("@{pari", let size?): self = .pari(Int(size) ?? 0)
-                case ("@{settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).flatMap(Int.init)
+                case ("@{settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).compactMap(Int.init)
                 self = .settabs(sizes)
                 case ("@{", _?): // Sometimes links have a space after opening brace
                     fallthrough
@@ -214,7 +214,7 @@ class Parser {
         let contents = contents[from...]
         //print(#function, from, String(contents))
         guard from < contents.endIndex else { return (nil, from) }
-        guard let mark = contents.index(of: "@") else {
+        guard let mark = contents.firstIndex(of: "@") else {
             let text = String(contents[from...])
             let token = AmigaGuide.Tokens.plaintext(text)
             return (token, contents.endIndex) /* return rest of contents */
@@ -228,7 +228,7 @@ class Parser {
         //print(#function, from, String(contents))
         switch contents[contents.index(after: mark)] {
         case "{":
-            guard let endmark = contents.index(of: "}") else { fatalError() }
+            guard let endmark = contents.firstIndex(of: "}") else { fatalError() }
             let text = contents[mark ..< endmark]
             if let token = AmigaGuide.TextTokens(String(text)) {
                 let token = AmigaGuide.Tokens.normal(token)
@@ -237,7 +237,7 @@ class Parser {
             }
             return (nil, endmark)
         default:
-            guard let endofline = contents.index(of: "\n") else {
+            guard let endofline = contents.firstIndex(of: "\n") else {
                 return (nil,contents.endIndex)
             }
             let start = contents.index(after: mark)
@@ -270,7 +270,7 @@ class Parser {
         }
     }
     private func unescape(_ line:String) -> String {
-        if let backslash = line.index(of: "\\") {
+        if let backslash = line.firstIndex(of: "\\") {
             let escaped = line.index(after: backslash)
             return line + unescape(String(line[escaped...]))
         }

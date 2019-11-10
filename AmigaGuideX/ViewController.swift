@@ -8,7 +8,7 @@
 
 import Cocoa
 
-fileprivate typealias TypingAttributes = [NSAttributedStringKey:Any]
+fileprivate typealias TypingAttributes = [NSAttributedString.Key:Any]
 
 fileprivate class Node {
     let name:String
@@ -175,7 +175,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 let font = typingAttributes[.font] as! NSFont
                 typingAttributes.updateValue(font.withTrait(trait: .unboldFontMask), forKey: .font)
             case .normal(.underline):
-                typingAttributes.updateValue(NSUnderlineStyle.styleSingle.rawValue, forKey: .underlineStyle)
+                typingAttributes.updateValue(NSUnderlineStyle.single.rawValue, forKey: .underlineStyle)
             case .normal(.nounderline):
                 typingAttributes.removeValue(forKey: .underlineStyle)
             case .normal(.plain):
@@ -260,7 +260,7 @@ class ViewController: NSViewController, NSTextViewDelegate {
         }
     }
 
-    func tabSize(spaces:Int, attributes:[NSAttributedStringKey:Any]) -> CGFloat {
+    func tabSize(spaces:Int, attributes:[NSAttributedString.Key:Any]) -> CGFloat {
         return String(repeating: " ", count: spaces).size(withAttributes: attributes).width
     }
 
@@ -335,7 +335,7 @@ extension ViewController: NavigationController {
         }
         // Alternative 2: Previous node is implicit, so check if not on the very first node in file
         if let currentNode = currentNode,
-            let currentIndex = nodeOrder.index(of: currentNode),
+            let currentIndex = nodeOrder.firstIndex(of: currentNode),
             currentIndex > 0,
             let _ = allNodes[nodeOrder[currentIndex - 1]]{
             return true
@@ -348,7 +348,7 @@ extension ViewController: NavigationController {
             return true
         }
         if let current = currentNode,
-            let index = nodeOrder.index(of: current) {
+            let index = nodeOrder.firstIndex(of: current) {
             return index < nodeOrder.endIndex - 1
         }
         return false
@@ -368,7 +368,7 @@ extension ViewController: NavigationController {
             let prevNode = precedingNode,
             let prev = allNodes[prevNode] else {
                 if let currentNode = currentNode,
-                    let currentIndex = nodeOrder.index(of: currentNode),
+                    let currentIndex = nodeOrder.firstIndex(of: currentNode),
                     1..<nodeOrder.endIndex ~= currentIndex,
                     let prev = allNodes[nodeOrder[currentIndex - 1]]{
                     parse(prev.contents, attributes: prev.typingAttributes)
@@ -392,7 +392,7 @@ extension ViewController: NavigationController {
             let next = allNodes[nextNode]
             else {
                 if let current = currentNode,
-                    let index = nodeOrder.index(of: current),
+                    let index = nodeOrder.firstIndex(of: current),
                     index < nodeOrder.endIndex - 1,
                     let next = allNodes[nodeOrder[index + 1]] {
                     /*
