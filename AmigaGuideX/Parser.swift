@@ -23,7 +23,7 @@ struct AmigaGuide {
         case prev(String) // PREV has pointer to next nodename
         case next(String) // NEXT has pointer to next nodename
         case index(String) // Name of node to show when Index button is pressed
-        indirect case node_(name:String, headline: String?, next:ToplevelTokens?, prev:ToplevelTokens?, contents:[AmigaGuide.Tokens])
+        //indirect case node_(name:String, headline: String?, next:ToplevelTokens?, prev:ToplevelTokens?, contents:[AmigaGuide.Tokens])
         case title(String)
         case wordwrap
         case smartwrap
@@ -38,38 +38,27 @@ struct AmigaGuide {
         init?(str:String) {
             guard let str = str.splitFirstWord() else { return nil }
             switch str.pre.lowercased() {
-            // FIXME: Node names can be enclosed by parentheses and containing whitespace
             case "node":
                 guard let rest = str.rest else { return nil }
 
                 let pattern = #"(\"?)(.+?)(?:\1)(?:\ +(\"?)(.+?)(\3))?$"#
                 let regex = try! NSRegularExpression(pattern: pattern, options: [])
-//                let regex = try! NSRegularExpression(pattern: "^\"?([^\"]+)\"?(?:\\s+\"?([^\"]+)\"?)?\\s*$", options: [])
-//                let regex = try! NSRegularExpression(pattern: "^(?:(?:\"([^\"]+)\"|([^\\s]+))\\s+)(?:\"?([^\"]+)\"?)?\\s*$", options: [])
                 
                 guard
                     let match = regex.firstMatch(in: rest,
                                                  options: .anchored,
-                                                 range: NSRange(rest.startIndex..., in: rest))
+                                                 range: NSRange(rest.startIndex..., in: rest)),
+                    match.numberOfRanges >= 2,
+                    let nameRange = Range(match.range(at: 2), in: rest)
                     else {
-                        assertionFailure()
+                        assertionFailure(rest)
                         return nil
                 }
-//                assert(match.numberOfRanges == 3)
-                /*
-                for i in 0..<match.numberOfRanges {
-                    guard let range = Range(match.range(at: i), in: rest) else { continue }
-                    print("\(i):", String(rest[Range(match.range(at: i), in: rest)!]))
-                }
-                 */
-                let name = String(rest[Range(match.range(at: 2), in: rest)!])
-                var title:String?
-                if let range = Range(match.range(at: 4), in: rest) {
-                    title = String(rest[range])
+                let name = String(rest[nameRange])
+                let title = Range(match.range(at: 4), in: rest).map { range in
+                    String(rest[range])
                 }
                 self = .node(name, title)
-                //guard let split = str.rest?.splitFirstWord() else { return nil }
-                //self = .node(split.pre, split.rest)
             case "endnode": self = .endnode
             case "wordwrap": self = .wordwrap
             case "smartwrap": self = .smartwrap
