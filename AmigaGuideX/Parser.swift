@@ -218,10 +218,21 @@ class Parser {
         let contents = contents[from...]
         //print(#function, from, String(contents))
         guard from < contents.endIndex else { return (nil, from) }
-        guard let mark = contents.firstIndex(of: "@") else {
-            let text = String(contents[from...])
-            let token = AmigaGuide.Tokens.plaintext(text)
-            return (token, contents.endIndex) /* return rest of contents */
+        guard
+            let mark = contents.firstIndex(of: "@")
+            else {
+                let text = String(contents[from...])
+                let token = AmigaGuide.Tokens.plaintext(text)
+                return (token, contents.endIndex) /* return rest of contents */
+        }
+        guard
+            mark == contents.startIndex ||
+                contents[contents.index(before: mark)] != "\\"
+            else {
+                let escaped = contents[from...mark]
+                let token = AmigaGuide.Tokens.plaintext(String(escaped))
+                let mark = contents.index(after: mark)
+                return (token, mark)
         }
         guard mark == from else {
             // FIXME: Should ignore outside of nodes
