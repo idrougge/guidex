@@ -14,7 +14,7 @@ struct AmigaGuide {
         case plaintext(String)
         case escaped(String)
         case newline // Also Texttokens.linebreak
-        case node(name:String, title:String?, contents:[Tokens])
+        case node(name: String, title: String?, contents: [Tokens])
     }
     enum ToplevelTokens {
         case database(String)   // name of DATABASE
@@ -28,14 +28,14 @@ struct AmigaGuide {
         case wordwrap
         case smartwrap
         case tab(Int)
-        case font(name:String, size:Int)
+        case font(name: String, size: Int)
         case author(String)
         case version(String)
         case copyright(String)
         case remark(String)
         case help(String) // Node for "help" button
         
-        init?(str:String) {
+        init?(str: String) {
             guard let str = str.splitFirstWord() else { return nil }
             switch str.pre.lowercased() {
             case "node":
@@ -112,19 +112,19 @@ struct AmigaGuide {
         case jright
         case lindent(Int) // Indentation level (in spaces) from next line
         case linebreak // Line break
-        case link(label:String,node:String,line:Int?) // Link to another file
+        case link(label: String, node: String, line: Int?) // Link to another file
         case par // Two linebreaks (new paragraph)
         case pard // Default paragraph formatting
         case pari(Int) // Indentation (in spaces) for first line of paragraphs
         case plain // Restore text formatting
         case settabs([Int])
-        case system(path:String) // Execute command
-        case quit(label:String)
+        case system(path: String) // Execute command
+        case quit(label: String)
         case tab
         case underline // {u} = underline, terminated by @{ub}
         case nounderline
         
-        init?(_ str:String) {
+        init?(_ str: String) {
             guard let tok = str.splitFirstWord() else { return nil }
             switch tok.pre.lowercased() {
             case "@{b": self = .bold
@@ -149,23 +149,32 @@ struct AmigaGuide {
                 case ("@{fg",let pen?): self = .foreground(pen)
                 case ("@{lindent", let size?): self = .lindent(Int(size) ?? 0)
                 case ("@{pari", let size?): self = .pari(Int(size) ?? 0)
-                case ("@{settabs", let sizes?): let sizes = sizes.components(separatedBy: .whitespaces).compactMap(Int.init)
-                self = .settabs(sizes)
+                case ("@{settabs", let sizes?):
+                    let sizes = sizes.components(separatedBy: .whitespaces).compactMap(Int.init)
+                    self = .settabs(sizes)
                 case ("@{", _?): // Sometimes links have a space after opening brace
                     fallthrough
                 case ("@{\"", _?),
                      (_, _) where str.starts(with: "@{\""):
                     // FIXME: Links can point to other files: @{title link file/node}
                     let pattern = #"(?i)@\{\s*(\"?)(.+?)(?:\1)\s+(link|system|rxs)\s+(\"?)([^\4]+?)(\4)\s*(?:\s+(\d+))?$"#
-                    guard let regex = try? NSRegularExpression(pattern: pattern, options: []),
+                    guard
+                        let regex = try? NSRegularExpression(pattern: pattern, options: []),
                         let match = regex.firstMatch(in: str, options: .anchored, range: NSRange(str.startIndex..., in: str)),
-                        match.numberOfRanges >= 5
-                        else { return nil }
-                    let label = String(str[Range(match.range(at: 2), in: str)!])
+                        match.numberOfRanges >= 5,
+                        let labelRange = Range(match.range(at: 2), in: str),
+                        let nodeRange = Range(match.range(at: 5), in: str)
+                        else {
+                            assertionFailure(str)
+                            return nil
+                    }
+                    assert(match.numberOfRanges == 8, str)
+                    let label = String(str[labelRange])
                     // FIXME: Handle System and REXX links by not handling them
                     let _ = String(str[Range(match.range(at: 3), in: str)!]) // Type of link
-                    let node = String(str[Range(match.range(at: 5), in: str)!])
-                    self = .link(label: label, node: node, line: nil)
+                    let node = String(str[nodeRange])
+                    let line = Range(match.range(at: 7), in: str).flatMap({ str[$0] }).flatMap(String.init).flatMap(Int.init)
+                    self = .link(label: label, node: node, line: line)
                 default:
                     print(tok.pre)
                     assertionFailure("\(tok.pre), \(tok.rest ?? "nil")")
@@ -178,31 +187,33 @@ struct AmigaGuide {
 
 class Parser {
 
-    private(set) var parseResult:[AmigaGuide.Tokens] = []
+    private(set) var parseResult: [AmigaGuide.Tokens] = []
     
-    init(file:String) {
+    init(file: String) {
         let fileURL = URL(fileURLWithPath: NSHomeDirectory() + file)
         // Brute-forcing because this init is only used for debug purposes
         let fileContents = try! String(contentsOf: fileURL, encoding: .isoLatin1)
         parseFile(fileContents)
     }
     
-    init(file url:URL) throws {
+    init(file url: URL) throws {
         let fileContents = try String(contentsOf: url, encoding: .isoLatin1)
         parseFile(fileContents)
     }
     
-    private func parseFile(_ contents:String) {
+    private func parseFile(_ contents: String) {
+        //let document = AmigaGuide()
+        
         var start = contents.startIndex
         while start < contents.endIndex {
-            let (t, pos):(AmigaGuide.Tokens?, String.Index) = getTokens(contents, from: start)
+            let (t, pos): (AmigaGuide.Tokens?, String.Index) = getTokens(contents, from: start)
             if let token = t {
                 parseResult.append(token)
             }
             start = pos
         }
     }
-    private func getTokens(_ contents:String, from:String.Index) -> (AmigaGuide.Tokens?, String.Index) {
+    private func getTokens(_ contents: String, from: String.Index) -> (AmigaGuide.Tokens?, String.Index) {
         let contents_copy = contents
         let contents = contents[from...]
         //print(#function, from, String(contents))
@@ -262,7 +273,7 @@ class Parser {
             return (nil, from)
         }
     }
-    private func unescape(_ line:String) -> String {
+    private func unescape(_ line: String) -> String {
         if let backslash = line.firstIndex(of: "\\") {
             let escaped = line.index(after: backslash)
             return line + unescape(String(line[escaped...]))
