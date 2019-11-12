@@ -144,7 +144,7 @@ struct AmigaGuide {
             case "@{pard": self = .pard
             case "@{plain": self = .plain
             default:
-                switch (tok.pre, tok.rest) {
+                switch (tok.pre.lowercased(), tok.rest) {
                 case ("@{bg",let pen?): self = .background(pen)
                 case ("@{fg",let pen?): self = .foreground(pen)
                 case ("@{lindent", let size?): self = .lindent(Int(size) ?? 0)
