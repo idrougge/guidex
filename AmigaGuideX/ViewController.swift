@@ -44,11 +44,6 @@ class ViewController: NSViewController, NSTextViewDelegate {
     private let paragraph = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
     private let manager = NSFontManager.shared
     
-    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
-        print(#function, menuItem)
-        return true
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.delegate = self
@@ -413,11 +408,6 @@ extension ViewController: NavigationController {
     }
     
     func retrace() {
-        defer {
-            self.view.window?.toolbar?.items.forEach{ item in
-                self.view.window?.windowController?.validateToolbarItem(item)
-            }
-        }
         print(#function, navigationHistory)
         guard canRetrace else {
             return

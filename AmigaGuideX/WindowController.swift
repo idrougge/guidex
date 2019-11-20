@@ -55,7 +55,28 @@ class WindowController: NSWindowController {
         self.contentViewController?.pageUp(sender)
     }
     
-    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    override func keyUp(with event: NSEvent) {
+        //print(#function, event, event.characters?.count, event.characters?.utf16)
+        switch event.characters {
+        case "<"?: self.didPressPrevious(event)
+        case ">"?: self.didPressNext(event)
+        default: return
+        }
+    }
+}
+
+extension WindowController: NSUserInterfaceValidations {
+    func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
+        if let item = item as? NSToolbarItem {
+            return validateToolbarItem(item)
+        }
+        if let item = item as? NSMenuItem {
+            return validateMenuItem(item)
+        }
+        return false
+    }
+    
+    func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         //print(#function, menuItem, menuItem.identifier, menuItem.identifier?.rawValue)
         let paths = ["left": \NavigationController.canGoBack,
                      "right": \NavigationController.canGoForward,
@@ -68,7 +89,7 @@ class WindowController: NSWindowController {
         return navigationController[keyPath: path]
     }
     
-    override func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
+    func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         //print(#function, item, item.itemIdentifier)
         let paths = ["left": \NavigationController.canGoBack,
                      "right": \NavigationController.canGoForward,
@@ -80,34 +101,17 @@ class WindowController: NSWindowController {
             else {
                 return item.isEnabled
         }
-        item.isEnabled = navigationController[keyPath: path]
-        return item.isEnabled
-    }
-    
-    override func keyUp(with event: NSEvent) {
-        //print(#function, event, event.characters?.count, event.characters?.utf16)
-        switch event.characters {
-        case "<"?: self.didPressPrevious(event)
-        case ">"?: self.didPressNext(event)
-        default: return
-        }
+        return navigationController[keyPath: path]
     }
 }
 
 class Toolbar: NSToolbar {
     override func validateVisibleItems() {
-        //print(#function)
+        super.validateVisibleItems()
         for item in items {
-            var responder = item.view?.nextResponder
-            while responder != nil {
-                responder = responder?.nextResponder
-                if responder?.responds(to: #selector(validateToolbarItem(_:))) ?? false {
-                    //print("RESPONDS")
-                    responder?.validateToolbarItem(item)
-                }
+            if item.target?.responds(to: #selector(NSUserInterfaceValidations.validateUserInterfaceItem)) == true {
+                item.isEnabled = item.target?.validateUserInterfaceItem(item) ?? true
             }
-            //item.view?.nextResponder?.validateToolbarItem(item)
-            //self.validateToolbarItem(item)
         }
     }
 }
