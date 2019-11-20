@@ -204,9 +204,10 @@ class ViewController: NSViewController, NSTextViewDelegate {
                 paragraph.lineBreakMode = .byTruncatingTail
                 paragraph.lineBreakMode = .byClipping
                 typingAttributes[.paragraphStyle] = paragraph
+            case .normal(.par):
+                textView.textStorage?.append(NSAttributedString(string: "\n\n", attributes: typingAttributes))
             case .normal(.pari(let indentation)):
                 textView.textStorage?.append(NSAttributedString(string: "PARI \(indentation)", attributes: typingAttributes))
-                break
             // TODO: Reset indentation for PARD?
             case .normal(.pard):
                 typingAttributes.removeValue(forKey: .foregroundColor)
